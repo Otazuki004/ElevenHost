@@ -37,6 +37,6 @@ if not API_ID or not API_HASH or not TOKEN or not OneApi:
   raise ValueError("Bro thought he can run anything lol, i mean you forgot some vars put on variables.py")
   exit()
 # _-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_|
-if len(TOKEN) > 50: app = Client("ElevenHost", session_string=TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=dict(root="Eleven/pyro"))
-else: app = Client("ElevenHost", bot_token=TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=dict(root="Eleven/pyro"))
+if len(TOKEN) > 50: app = Client("ElevenHost", session_string=TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=dict(root="ElevenHost/pyro"))
+else: app = Client("ElevenHost", bot_token=TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=dict(root="ElevenHost/pyro"))
 # ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
