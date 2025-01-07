@@ -15,8 +15,8 @@ class OneApi:
     log.info("[^•^] Connecting with OneApi")
     try:
       loop = asyncio.get_event_loop()
-      if loop.is_running(): self.ws = asyncio.ensure_future(websockets.connect(OneApiUrl))
-      else: self.ws = loop.run_until_complete(websockets.connect(OneApiUrl))
+      if loop.is_running(): self.ws = asyncio.ensure_future(websockets.connect(f"{OneApiUrl}/ws/ElevenHost/"))
+      else: self.ws = loop.run_until_complete(websockets.connect(f"{OneApiUrl}/ws/ElevenHost/"))
       log.info("OneApi connected!")
     except: log.info(f"OneApi connection failed: {traceback.format_exc}")
   async def exists(self, user_id: int):
