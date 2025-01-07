@@ -1,6 +1,6 @@
 import asyncio
 import websockets
-from ElevenHost import OneApiUrl
+from .. import OneApiUrl
 import logging
 import traceback
 import json
