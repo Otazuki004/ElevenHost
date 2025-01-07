@@ -20,6 +20,7 @@ class OneApi:
       log.info("OneApi connected!")
     except: log.info(f"OneApi connection failed: {(traceback.format_exc())}")
   async def exists(self, user_id: int):
+    return True
     if not self.ws: raise ConnectionError("OneApi is not connected")
     try:
       s = {'check_user': user_id}
