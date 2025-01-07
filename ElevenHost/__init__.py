@@ -5,7 +5,7 @@ from pyrogram import *
 import logging
 from variables import *
 import os 
-from motor import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 from .api import *
 
