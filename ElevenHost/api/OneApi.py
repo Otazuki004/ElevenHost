@@ -1,6 +1,5 @@
 import asyncio
 import websockets
-from .. import OneApiUrl
 import logging
 import traceback
 import json
@@ -11,6 +10,7 @@ class OneApi:
   def __init__(self):
     self.ws = None
   def connect(self):
+    from .. import OneApiUrl
     if self.ws: log.error("You've already connected with OneApi")
     log.info("[^•^] Connecting with OneApi")
     try:
