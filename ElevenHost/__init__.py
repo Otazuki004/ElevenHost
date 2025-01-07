@@ -23,7 +23,7 @@ MONGO_DB_URI = os.environ.get("MONGO_DB_URI") or VAR_MONGO_DB_URI
 MONGO_DB = MongoClient(MONGO_DB_URI) 
 DATABASE = AsyncIOMotorClient(MONGO_DB_URI)[f"ElevenHost"]
 
-OneApiUrl = ""
+OneApiUrl = "localhost:8080"
 Version = 0.1
 
 # -------------------------------------- Main stuffs Ig
