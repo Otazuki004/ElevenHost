@@ -14,7 +14,7 @@ from .api import *
 api = OneApi()
 
 logging.basicConfig( 
-  format="[Sophia-Beta] %(name)s - %(levelname)s - %(message)s",
+  format="[ElevenHost] %(name)s - %(levelname)s - %(message)s",
   handlers=[logging.FileHandler("log.txt"), logging.StreamHandler()],
   level=logging.INFO,
 )
