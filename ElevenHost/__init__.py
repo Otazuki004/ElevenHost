@@ -7,7 +7,11 @@ from variables import *
 import os 
 from motor import AsyncIOMotorClient
 from pymongo import MongoClient
+from .api import *
+
 # •••••••••••••••••••••••••••••••••••/\
+
+api = OneApi()
 
 logging.basicConfig( 
   format="[Sophia-Beta] %(name)s - %(levelname)s - %(message)s",
