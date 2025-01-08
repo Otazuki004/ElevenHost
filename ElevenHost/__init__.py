@@ -5,6 +5,7 @@ from pyrogram import *
 import logging
 from variables import *
 import os 
+from datetime import datetime 
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 from .api import *
@@ -26,6 +27,7 @@ DATABASE = AsyncIOMotorClient(MONGO_DB_URI)[f"ElevenHost"]
 
 OneApiUrl = "localhost:8080"
 Version = 0.1
+bot_start_time = datetime.now()
 
 # -------------------------------------- Main stuffs Ig
 API_ID = os.environ.get("API_ID") or VAR_API_ID
