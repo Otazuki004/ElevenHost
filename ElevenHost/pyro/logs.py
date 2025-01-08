@@ -1,8 +1,8 @@
 import io
 from pyrogram import *
 from ElevenHost import app
-from config import OWNER_ID
-from config import CO_OWNER_ID
+from variables import OWNER_ID
+from variables import CO_OWNER_ID
 import traceback
 from subprocess import getoutput as run
 from pyrogram.enums import ChatAction
