@@ -1,3 +1,5 @@
+# ©️ @ParadopiaXD | @YoursSage
+
 import logging
 import os
 import time
