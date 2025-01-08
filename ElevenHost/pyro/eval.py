@@ -1,3 +1,5 @@
+# ©️ @ParadopiaXD | @YoursSage
+
 import io
 import sys
 import traceback
