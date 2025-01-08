@@ -1,13 +1,11 @@
 import io
 from pyrogram import *
 from ElevenHost import app
-from variables import OWNER_ID
-from variables import CO_OWNER_ID
 import traceback
 from subprocess import getoutput as run
 from pyrogram.enums import ChatAction
 
-@app.on_message(filters.command(["logs", "log"], prefixes=prefix))
+@app.on_message(filters.command(["logs", "log"]))
 async def logs(_, message):
     if message.from_user.id == OWNER_ID or message.from_user.id in CO_OWNER_ID:
         print("")
