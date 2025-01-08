@@ -1,50 +1,38 @@
 # ©️ @ParadopiaXD | @YoursSage
 
+import asyncio 
+import requests
 import logging
 import os
 import time
 from pyrogram import filters, Client
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from ElevenHost import app
+from datetime import datetime
 
-# Logging setup
-FORMAT = "[ElevenHost]: %(message)s"
-logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler('logs.txt'),
-                                                  logging.StreamHandler()], format=FORMAT)
+def ping_website(url):
+    try:
+        start_time = time.time()
+        response = requests.get(url)
+        end_time = time.time()
 
-# Start time
-StartTime = time.time()
+        if response.status_code == 200:
+            response_time_ms = (end_time - start_time) * 1000
+            return f"{response_time_ms:.2f}ms"
+        else:
+            return f"Failed to ping {url}. Status code: {response.status_code}"
 
-# Command prefixes
-prefix = [".", "!", "?", "*", "$", "#", "/"]
+    except requests.ConnectionError:
+        return f"» Failed to connect to {url}"
 
-# Function to get readable time
-def get_readable_time(seconds: int) -> str:
-    count = 0
-    ping_time = ""
-    time_list = []
-    time_suffix_list = ["s", "m", "h", "days"]
-    while count < 4:
-        count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
-        if seconds == 0 and remainder == 0:
-            break
-        time_list.append(int(result))
-        seconds = int(remainder)
-    for x in range(len(time_list)):
-        time_list[x] = str(time_list[x]) + time_suffix_list[x]
-    if len(time_list) == 4:
-        ping_time += time_list.pop() + ", "
-    time_list.reverse()
-    ping_time += ":".join(time_list)
-    return ping_time
+telegram_url = "https://google.com"
 
-# Command handler
-@app.on_message(filters.command("ping", prefixes=prefix))
-async def ping(_, message):
-    start_time = time.time()
-    await message.reply_text("`Pinging...`")
-    end_time = time.time()
-    ping_time = round((end_time - start_time) * 1000, 3)
-    uptime = get_readable_time(int(time.time() - start_time))
-    await message.reply_text("**I'm Alive !**\n⋙ 🔔 **Ping**: {ping_time}\n⋙ ⬆️ **Uptime**: {uptime}")
+@bot.on_message(filters.command("ping", prefixes=HANDLER) & filters.user('me'))
+async def ping_pong(client, message):
+    start_time = bot_start_time
+    end_time = datetime.now()
+    ping_time = (end_time - start_time).total_seconds() * 1000
+    uptime = (end_time - bot_start_time).total_seconds()
+    hours, remainder = divmod(uptime, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    await message.reply_text(f"» Pᴏɴɢ! Rᴇsᴘᴏɴsᴇ ᴛɪᴍᴇ: {ping_website(telegram_url)}\n» Uᴘᴛɪᴍᴇ: {int(hours)}h {int(minutes)}m {int(seconds)}s")
