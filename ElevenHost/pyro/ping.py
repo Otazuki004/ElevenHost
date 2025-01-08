@@ -10,6 +10,8 @@ from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 from ElevenHost import app
 from datetime import datetime
 
+prefix = [".", "!", "?", "*", "$", "#", "/"]
+
 def ping_website(url):
     try:
         start_time = time.time()
@@ -27,7 +29,7 @@ def ping_website(url):
 
 telegram_url = "https://google.com"
 
-@bot.on_message(filters.command("ping", prefixes=HANDLER) & filters.user('me'))
+@app.on_message(filters.command("ping", prefixes=prefix))
 async def ping_pong(client, message):
     start_time = bot_start_time
     end_time = datetime.now()
