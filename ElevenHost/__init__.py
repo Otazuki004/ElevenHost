@@ -1,5 +1,5 @@
-# -_- @Otazuki & @KoraxD & @Paradopia
-# @Hyper_Speed0™ 
+# -_- @Otazuki & @KoraxD & @YoursSage
+# @Hyper_Speed0™ | @ParadopiaXD
 
 from pyrogram import *
 import logging
