@@ -46,5 +46,5 @@ async def ping(_, message):
     await message.reply_text("`Pinging...`")
     end_time = time.time()
     ping_time = round((end_time - start_time) * 1000, 3)
-    uptime = get_readable_time(int(time.time() - StartTime))
+    uptime = get_readable_time(int(time.time() - start_time))
     await message.reply_text("**I'm Alive !**\n⋙ 🔔 **Ping**: {ping_time}\n⋙ ⬆️ **Uptime**: {uptime}")
