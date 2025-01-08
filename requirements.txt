@@ -3,3 +3,4 @@ TgCrypto
 motor==3.6.0
 pymongo[srv]
 websockets
+aiofiles 
