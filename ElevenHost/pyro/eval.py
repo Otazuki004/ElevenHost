@@ -3,7 +3,7 @@
 import io
 import sys
 import traceback
-from ElevenHost import app
+from ElevenHost import *
 from datetime import datetime
 from pyrogram import filters
 from pyrogram.types import Message
@@ -42,7 +42,7 @@ async def runPyro_Funcs(app:app, msg:Message) -> None:
     evason = exc or stderr or stdout or vacue or "ɴᴏ ᴏᴜᴛᴘᴜᴛ"
     eoac = datetime.now()
     runcs = (eoac - soac).microseconds / 1000
-    oucode = f"📎 ᴄᴏᴅᴇ:\n```python{code[1]}```\n📒 ᴏᴜᴛᴘᴜᴛ:\n```python{evason}```\n✨ ᴛɪᴍᴇ ᴛᴀᴋᴇɴ: {runcs}ᴍs"
+    oucode = f"📒 ᴏᴜᴛᴘᴜᴛ:\n<pre>{evason}</pre>\n✨ ᴛɪᴍᴇ ᴛᴀᴋᴇɴ: {runcs}ᴍs"
     if len(oucode) > 4000:
         async with aiofiles.open('eval.txt', mode='w') as f:
             await f.write(runcs)
