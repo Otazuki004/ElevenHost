@@ -8,6 +8,7 @@ import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 from .api import *
+import asyncio
 
 # •••••••••••••••••••••••••••••••••••/\
 
@@ -39,4 +40,22 @@ if not API_ID or not API_HASH or not TOKEN or not OneApi:
 # _-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_|
 if len(TOKEN) > 50: app = Client("ElevenHost", session_string=TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=dict(root="ElevenHost/pyro"))
 else: app = Client("ElevenHost", bot_token=TOKEN, api_id=API_ID, api_hash=API_HASH, plugins=dict(root="ElevenHost/pyro"))
-# ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+# ———— R U N ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+async def run(command):
+  try:
+    process = await asyncio.create_subprocess_shell(
+      command,
+      stdout=asyncio.subprocess.PIPE,
+      stderr=asyncio.subprocess.PIPE,
+      start_new_session=True
+    )
+    stdout, stderr = await process.communicate()
+    if stdout:
+      return stdout.decode().strip()
+    if stderr:
+      return stderr.decode().strip()
+  except Exception as e:
+    logging.error(f"Failed to run command '{command}': {e}")
+    return False
+# _______________________________________________________________    
+      
