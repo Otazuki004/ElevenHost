@@ -42,7 +42,7 @@ async def runPyro_Funcs(app:app, msg:Message) -> None:
     evason = exc or stderr or stdout or vacue or "ɴᴏ ᴏᴜᴛᴘᴜᴛ"
     eoac = datetime.now()
     runcs = (eoac - soac).microseconds / 1000
-    oucode = f"📎 ᴄᴏᴅᴇ:\n```python\n{code[1]}```\n📒 ᴏᴜᴛᴘᴜᴛ:\n```python\n{evason}```\n✨ ᴛɪᴍᴇ ᴛᴀᴋᴇɴ: {runcs}ᴍs"
+    oucode = f"📎 ᴄᴏᴅᴇ:\n```python{code[1]}```\n📒 ᴏᴜᴛᴘᴜᴛ:\n```python{evason}```\n✨ ᴛɪᴍᴇ ᴛᴀᴋᴇɴ: {runcs}ᴍs"
     if len(oucode) > 4000:
         async with aiofiles.open('eval.txt', mode='w') as f:
             await f.write(runcs)
