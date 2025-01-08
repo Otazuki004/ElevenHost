@@ -1,4 +1,4 @@
-# ©️ @ParadopiaXD | @YoursSage
+# ©️ @Hyper_speed0 | @ParadopiaxD
 
 import asyncio 
 import requests
@@ -6,11 +6,8 @@ import logging
 import os
 import time
 from pyrogram import filters, Client
-from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
-from ElevenHost import app
+from .. import *
 from datetime import datetime
-
-prefix = [".", "!", "?", "*", "$", "#", "/"]
 
 def ping_website(url):
     try:
@@ -29,7 +26,7 @@ def ping_website(url):
 
 telegram_url = "https://google.com"
 
-@app.on_message(filters.command("ping", prefixes=prefix))
+@app.on_message(filters.command("ping"))
 async def ping_pong(client, message):
     start_time = bot_start_time
     end_time = datetime.now()
