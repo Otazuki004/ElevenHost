@@ -37,7 +37,7 @@ TOKEN = os.environ.get("TOKEN") or VAR_TOKEN
 MY_VERSION = 1.2
 DEVS = os.environ.get("DEVS") or VAR_DEVS
 # _______________________________________
-if not API_ID or not API_HASH or not TOKEN or not OneApi:
+if not API_ID or not API_HASH or not TOKEN or not MONGO_DB_URI or not OneApiUrl:
   raise ValueError("Bro thought he can run anything lol, i mean you forgot some vars put on variables.py")
   exit()
 # _-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_-_+_|
