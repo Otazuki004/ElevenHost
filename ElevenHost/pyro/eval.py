@@ -12,7 +12,7 @@ import aiofiles
 async def aexec(code, app, msg):
     m, from_user, r = msg, msg.from_user, msg.reply_to_message
     exec(
-        "async def __otazuki_run(app, msg, m, r, from): "
+        "async def __otazuki_run(app, msg, m, r, frm): "
         + "\n p = print"
         + "".join(f"\n {l_}" for l_ in code.split("\n"))
     )
