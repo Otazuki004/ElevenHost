@@ -3,12 +3,7 @@ import os
 import time
 from pyrogram import filters, Client
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
-from variables import MONGODB_URL
 from ElevenHost import app
-
-# MongoDB setup
-MONGO = MongoClient(MONGODB_URL)
-DATABASE = MONGO.ElevenHost
 
 # Logging setup
 FORMAT = "[ElevenHost]: %(message)s"
