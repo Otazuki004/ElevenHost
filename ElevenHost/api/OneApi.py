@@ -7,13 +7,14 @@ log = logging.getLogger("OneApi")
 
 class OneApi:
   def __init__(self):
-    from .. import OneApiUrl
     self.connected = False
-    self.url = OneApiUrl
+    self.url = None
   def connect(self):
     if self.connected: return log.error("You've already connected with OneApi")
     log.info("[^•^] Connecting with OneApi")
     try:
+      from .. import OneApiUrl
+      self.url = OneApiUrl
       self.connected = True
       log.info("OneApi connected!")
     except:
