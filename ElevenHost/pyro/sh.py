@@ -4,9 +4,10 @@ import aiofiles
 
 @app.on_message(filters.command('sh'))
 async def sh(_, message):
-  cmd = message.text.split(None, 1)[1]
+  a = await message.reply("Processing...")
   if len(message.command) < 2:
     return await message.reply("Text too short")
+  cmd = message.text.split(None, 1)[1]
   results = await run(cmd)
   if len(results) > 4000:
     async with aiofiles.open('shell.txt', mode='w') as uwu:
@@ -14,3 +15,4 @@ async def sh(_, message):
     await message.reply_document('shell.txt')
   else:
     await message.reply(f"```python\n{results}```")
+  await a.delete()
