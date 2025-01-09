@@ -12,14 +12,14 @@ import aiofiles
 async def aexec(code, app, msg):
     m, from_user, r = msg, msg.from_user, msg.reply_to_message
     exec(
-        "async def __otazuki_run(app, msg, m, r, frm): "
+        "async def __otazuki_run(app, message, m, r, frm, chat_id): "
         + "\n p = print"
         + "".join(f"\n {l_}" for l_ in code.split("\n"))
     )
-    return await locals()["__otazuki_run"](app, msg, m, r, from_user)
+    return await locals()["__otazuki_run"](app, message, m, r, from_user, m.chat.id)
     
-@app.on_message(filters.command("eval"))
-@app.on_edited_message(filters.command("eval"))
+@app.on_message(filters.command(["e", "eval"]) & filters.user(DEVS))
+@app.on_edited_message(filters.command(["e", "eval"]) & filters.user(DEVS))
 async def runPyro_Funcs(app:app, msg:Message) -> None:
     code = msg.text.split(None, 1)
     if len(code) == 1:
