@@ -9,6 +9,7 @@ class OneApi:
   def __init__(self):
     self.connected = False
     self.url = None
+  
   def connect(self):
     if self.connected: return log.error("You've already connected with OneApi")
     log.info("[^•^] Connecting with OneApi")
@@ -19,6 +20,7 @@ class OneApi:
       log.info("OneApi connected!")
     except:
       log.error(traceback.format_exc())
+  
   async def exists(self, user_id: int):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
@@ -34,6 +36,7 @@ class OneApi:
     except:
       log.error(traceback.format_exc())
     return False
+  
   async def create_user(self, name: str, user_id: int):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
@@ -46,6 +49,7 @@ class OneApi:
     except:
       log.error(traceback.format_exc())
     return False
+  
   async def get_projects(self, user_id: int):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
@@ -57,4 +61,15 @@ class OneApi:
         elif 'error' in r.json(): log.error(f"[!] OneApi error: {r.json().get('error')}")
     except:
       log.error(traceback.format_exc())
+    return False
+  
+  async def create_project(self, name: str, user_id: int):
+    if not self.connected: raise ConnectionError("OneApi isn't connected")
+    try:
+      data = {"name": name, "user_id": user_id}
+      async with httpx.AsyncClient() as mano:
+        r = await mano.post(f'{self.url}/create_project/', json=data)
+        if r.status_code == 200: return True
+        elif 'error' in r.json(): log.error(f"[!] OneApi error: {r.json().get('error')}")
+    except: log.error(traceback.format_exc())
     return False
