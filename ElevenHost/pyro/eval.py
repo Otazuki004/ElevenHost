@@ -16,7 +16,7 @@ async def aexec(code, app, msg):
         + "\n p = print"
         + "".join(f"\n {l_}" for l_ in code.split("\n"))
     )
-    return await locals()["__otazuki_run"](app, message, m, r, from_user, m.chat.id)
+    return await locals()["__otazuki_run"](app, m, m, r, from_user, m.chat.id)
     
 @app.on_message(filters.command(["e", "eval"]) & filters.user(DEVS))
 @app.on_edited_message(filters.command(["e", "eval"]) & filters.user(DEVS))
