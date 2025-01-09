@@ -6,9 +6,10 @@ import json
 log = logging.getLogger("OneApi")
 
 class OneApi:
-  def __init__(self, api_url):
+  def __init__(self):
+    from .. import OneApiUrl
     self.connected = False
-    self.url = api_url
+    self.url = OneApiUrl
   def connect(self):
     if self.connected: return log.error("You've already connected with OneApi")
     log.info("[^•^] Connecting with OneApi")
