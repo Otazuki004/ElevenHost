@@ -27,6 +27,7 @@ class OneApi:
         if response.status_code == 200:
           return True
         elif response.status_code == 404:
+          log.info("Line 30 OneApi user not found successfully")
           return False
         else:
           log.error(f"[!] OneApi error: {response.status_code}: {response.text}")
