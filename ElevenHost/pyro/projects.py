@@ -5,6 +5,7 @@ from .. import *
 
 @app.on_message(filters.command(["project", "projects"]) & filters.user(DEVS))
 async def projects(_, message):
+    if not await api.exists(message.from_user.id): return await message.reply("You didn't registered please use /start to register!")
     buttons = [
         [InlineKeyboardButton("𝙋𝙍𝙊 𝙎𝙀𝙍𝙑𝙀𝙍", callback_data="2GB_RAM")],
         [InlineKeyboardButton("𝙎𝙐𝙋𝙀𝙍 𝙎𝙀𝙍𝙑𝙀𝙍", callback_data="4GB_RAM")],
