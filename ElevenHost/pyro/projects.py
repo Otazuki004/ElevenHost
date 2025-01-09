@@ -3,7 +3,7 @@ from pyrogram import filters, Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
 from .. import *
 
-@app.on_message(filters.command(["project", "projects"]) & filters.user(DEVS))
+@app.on_message(filters.command(["project", "projects"]))
 async def projects(_, message):
     if not await api.exists(message.from_user.id): return await message.reply("You didn't registered please use /start to register!")
     buttons = [
