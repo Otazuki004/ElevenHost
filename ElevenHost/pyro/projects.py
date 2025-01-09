@@ -1,7 +1,7 @@
 from ElevenHost import app
 from pyrogram import filters, Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
-from variables import DEVS
+from . import *
 
 @app.on_message(filters.command(["projects"]))
 def start(client, message):
