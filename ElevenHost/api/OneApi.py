@@ -28,10 +28,21 @@ class OneApi:
         if response.status_code == 200:
           return True
         elif response.status_code == 404:
-          log.info("Line 30 OneApi user not found successfully")
           return False
         else:
           log.error(f"[!] OneApi error: {response.status_code}: {response.text}")
+    except:
+      log.error(traceback.format_exc())
+    return False
+  async def create_user(self, name: str, user_id: int):
+    if not self.connected: raise ConnectionError("OneApi isn't connected")
+    try:
+      data = {"name": name, "user_id": user_id}
+      async with httpx.AsyncClient() as mano:
+        r = await mano.post(f'{self.url}/create_user/', json=data)
+        if r.status_code == 200:
+          return True
+        elif 'error' in r.json(): log.error(f"[!] OneApi error: {r.json().get('error')}")
     except:
       log.error(traceback.format_exc())
     return False
