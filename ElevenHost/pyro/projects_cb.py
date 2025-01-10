@@ -40,12 +40,12 @@ async def select_plans(_, query):
     try:
         buttons = InlineKeyboardMarkup([
           [
-            InlineKeyboardButton("Free", callback_data="?"),
-            InlineKeyboardButton("Basic", callback_data="?")
+            InlineKeyboardButton("Free", callback_data="create_project_free"),
+            InlineKeyboardButton("Basic", callback_data="create_project_basic")
           ],
           [
-            InlineKeyboardButton("Adavanced", callback_data="?"),
-            InlineKeyboardButton("Professional", callback_data="?")
+            InlineKeyboardButton("Advanced", callback_data="create_project_advance"),
+            InlineKeyboardButton("Professional", callback_data="create_project_pro") 
           ]
         ])
         await query.message.edit_text(
@@ -54,12 +54,13 @@ async def select_plans(_, query):
         )
     except: pass
 
-@app.on_callback_query(filters.regex("^create_project$"))
+@app.on_callback_query(qfilter("create_project"))
 async def create_project(_, callback_query):
     try:
+        data = callback_query.data
         user_id = callback_query.from_user.id
         user_name = callback_query.from_user.first_name
-
+        plan = data.replace('create_project_', '')
         await callback_query.message.edit_text(
             f"🔨 **Hey {user_name}, please provide a name for your new project.**",
             reply_markup=InlineKeyboardMarkup([[
@@ -67,7 +68,7 @@ async def create_project(_, callback_query):
             ]])
         )
         name = await ask(user=user_id, chat=callback_query.message.chat.id)
-        await api.create_project(name, user_id)
+        await api.create_project(name, user_id, plan)
         await callback_query.message.edit_text("✅ Project created successfully!")
     except Exception as e:
         logging.error(f"Error in create_project callback: {e}")
