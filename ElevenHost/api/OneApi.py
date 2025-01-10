@@ -63,14 +63,15 @@ class OneApi:
       log.error(traceback.format_exc())
     return False
   
-  async def create_project(self, name: str, user_id: int):
+  async def create_project(self, name: str, user_id: int, plan: str):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
-      data = {"name": name, "user_id": user_id}
+      data = {"name": name, "user_id": user_id, "plan": plan}
       async with httpx.AsyncClient() as mano:
         r = await mano.post(f'{self.url}/create_project/', json=data)
         if r.status_code == 200: return True
         elif 'error' in r.json(): log.error(f"[!] OneApi error: {r.json().get('error')}")
+        else: return r.json().get('message', False)
     except: log.error(traceback.format_exc())
     return False
   
