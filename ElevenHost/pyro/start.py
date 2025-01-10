@@ -14,10 +14,8 @@ async def start(_, message: Message):
     if not await api.exists(user_id):
       registering_message = await message.reply("⏳ Registering your account...")
       await api.create_user(user_name, user_id)
-      await registering_message.edit("✅ Registration complete! Welcome to Eleven Host.")
-    else:
-      logging.info(f"User {user_name} ({user_id}) already exists.")
-
+      await registering_message.delete()
+    
     caption_text = (
       "| 𝗘𝗟𝗘𝗩𝗘𝗡 𝗛𝗢𝗦𝗧 |\n\n"
       "🍃 We provide the most reliable 🧡 and high-performance 🌩️ hosting solutions, "
