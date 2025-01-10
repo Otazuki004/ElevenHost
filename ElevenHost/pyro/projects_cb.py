@@ -75,6 +75,7 @@ async def create_project(_, callback_query):
               break
             elif mano != False:
               await app.send_message(callback_query.message.chat.id, mano)
+              if 'insufficient' in mano.lower(): break 
             else: 
               await app.send_message(callback_query.message.chat.id, "🚨 An error occurred, try again later")
               break
