@@ -1,7 +1,7 @@
 from ElevenHost import app
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from .. import api
-from ..others import ask
+from ..others import ask, qfilter
 import logging
 from pyrogram import *
 
@@ -35,10 +35,23 @@ async def view_project(_, callback_query):
         logging.error(f"Error in view_project callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
-@app.on_callback_query(filters.regex("select_plans"))
+@app.on_callback_query(qfilter("select_plans"))
 async def select_plans(_, query):
     try:
-        pass
+        buttons = InlineKeyboardMarkup([
+          [
+            InlineKeyboardButton("Free", callback_data="?"),
+            InlineKeyboardButton("Basic", callback_data="?")
+          ],
+          [
+            InlineKeyboardButton("Adavanced", callback_data="?"),
+            InlineKeyboardButton("Professional", callback_data="?")
+          ]
+        ])
+        await callback_query.message.edit_text(
+          "Click button below to choose a plan",
+          reply_markup=buttons
+        )
     except: pass
 
 @app.on_callback_query(filters.regex("^create_project$"))
