@@ -50,7 +50,7 @@ async def projects(_, message: Message):
             "🚨 An unexpected error occurred. Please try again later or contact support.",
             quote=True
         )
-        print(f"Error in /projects: {e}")
+        logging.error(f"Error in /projects: {traceback.format_exc()}")
 
 
 @app.on_callback_query(filters.regex("^project_"))
