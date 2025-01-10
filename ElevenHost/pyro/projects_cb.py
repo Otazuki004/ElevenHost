@@ -68,8 +68,9 @@ async def create_project(_, callback_query):
             ]])
         )
         name = await ask(user=user_id, chat=callback_query.message.chat.id)
-        await api.create_project(name, user_id, plan)
-        await callback_query.message.edit_text("✅ Project created successfully!")
+        mano = await api.create_project(name, user_id, plan)
+        if mano != True: await callback_query.answer(mano)
+        else: await callback_query.message.edit_text("✅ Project created successfully!")
     except Exception as e:
         logging.error(f"Error in create_project callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
