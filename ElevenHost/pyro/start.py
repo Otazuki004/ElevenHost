@@ -3,6 +3,7 @@ from .. import api
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from pyrogram.errors import UserAlreadyParticipant
+import logging 
 
 @app.on_message(filters.command('start'))
 async def start(_, message: Message):
@@ -43,7 +44,7 @@ async def start(_, message: Message):
             reply_markup=keyboard
         )
     except Exception as e:
-        logger.error(f"Error in /start: {e}")
+        logging.error(f"Error in /start: {e}")
         await message.reply("🚨 An error occurred while processing your request. Please try again later.")
 
 @app.on_callback_query(filters.regex("get_started"))
