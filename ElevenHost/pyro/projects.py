@@ -96,7 +96,7 @@ async def create_project(_, callback_query):
                 InlineKeyboardButton("Cancel", callback_data="cancel_create_project")
             ]])
         )
-        name = await ask(callback_query.message)
+        name = await ask(user=user_id, chat=callback_query.message.chat.id)
         await api.create_project(name, user_id)
         await callback_query.message.edit_text("Successfully created!")
     except Exception as e:
