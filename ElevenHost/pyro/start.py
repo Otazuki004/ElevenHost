@@ -1,5 +1,5 @@
 from ElevenHost import app
-from ElevenHost.api import api
+from .. import api
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from pyrogram.errors import UserAlreadyParticipant
