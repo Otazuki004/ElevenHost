@@ -4,7 +4,8 @@ import traceback
 import json
 from ..OneApi import *
 
-async def user_info(self, user_id: int):
+class UserInfo:
+  async def user_info(self, user_id: int):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
       data = {"user_id": user_id}
