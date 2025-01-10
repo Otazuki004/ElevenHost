@@ -18,10 +18,11 @@ async def projects(_, message: Message):
         user_projects = await api.get_projects(user_id)
 
         if user_projects:
-            buttons = [
-                [InlineKeyboardButton(project.get("name"), callback_data=f"project_{project.get('project_id')}")]
-                for project in user_projects if project.get("name") and project.get("id")
-            ]
+            buttons = []
+            for x in user_projects:
+                if x.get('name') and x.get('project_id'):
+                    buttons.append([InlineKeyboardButton(x.get("name"), callback_data=f"project_{x.get('project_id')}")])
+            
             buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="create_project")])
 
             reply_markup = InlineKeyboardMarkup(buttons)
