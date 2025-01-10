@@ -1,4 +1,4 @@
- from pyrogram import *
+from pyrogram import *
 from ElevenHost import *
 import asyncio
 import logging
