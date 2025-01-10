@@ -17,12 +17,11 @@ async def start(_, message: Message):
       await registering_message.delete()
     
     caption_text = (
-      "| 𝗘𝗟𝗘𝗩𝗘𝗡 𝗛𝗢𝗦𝗧 |\n\n"
-      "🍃 We provide the most reliable 🧡 and high-performance 🌩️ hosting solutions, "
-      "crafted for simplicity and ease of use.\n\n"
-      "🌟 Enjoy fast and secure hosting with unlimited potential! 🗝️ (°ᴗ°) 🥀✨\n\n"
-      "📌 Channel: @ElevenHost\n"
-      "📬 Support: @ElevenHostSupport\n"
+      "𝗘𝗟𝗘𝗩𝗘𝗡 𝗛𝗢𝗦𝗧\n\n"
+      "🍃 We provide the most reliable 🧡 and high-performance 🌩️ hosting solutions with a focus on simplicity and ease of use.\n"
+      "Enjoy fast and secure hosting with unlimited potential! 🗝️ (°ᴗ°) 🥀✨\n\n"
+      "🦋 Channel: @ElevenHost\n"
+      "👾 Support: @ElevenHostSupport\n"
     )
 
     keyboard = InlineKeyboardMarkup([
