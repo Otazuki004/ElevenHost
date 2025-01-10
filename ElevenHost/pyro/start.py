@@ -22,7 +22,7 @@ async def start(_, message: Message):
                 await api.add_referral(referral_user_id)
             await registering_message.edit("✅ Registration complete! Welcome to Eleven Host.")
         else:
-            logger.info(f"User {user_name} ({user_id}) already exists.")
+            logging.info(f"User {user_name} ({user_id}) already exists.")
 
         caption_text = (
             "| 𝗘𝗟𝗘𝗩𝗘𝗡 𝗛𝗢𝗦𝗧 |\n\n"
