@@ -2,6 +2,7 @@ from ElevenHost import app
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from .. import api
+from ..others import *
 
 @app.on_message(filters.command(["project", "projects"]))
 async def projects(_, message: Message):
@@ -95,26 +96,10 @@ async def create_project(_, callback_query):
                 InlineKeyboardButton("Cancel", callback_data="cancel_create_project")
             ]])
         )
+        await ask(callback_query.message)
 
-        @app.on_message(filters.text)
-        async def handle_project_name(msg: Message):
-            if msg.from_user.id == user_id:
-                project_name = msg.text
-                success = await api.create_project(project_name, user_id)
-
-                if success:
-                    await msg.reply_text(
-                        f"✅ **Project '{project_name}' created successfully!**\n"
-                        "You can now manage it in the project list.",
-                        quote=True
-                    )
-                    await projects(_, callback_query.message)
-                else:
-                    await msg.reply_text("❌ Failed to create project. Try again later.", quote=True)
-
-                app.remove_handler(handle_project_name)
     except Exception as e:
-        print(f"Error in create_project callback: {e}")
+    print(f"Error in create_project callback: {e}")
 
 
 @app.on_callback_query(filters.regex("^projects_list$"))
