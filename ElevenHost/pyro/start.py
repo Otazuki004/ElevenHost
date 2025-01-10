@@ -63,7 +63,7 @@ async def get_started(_, callback_query):
         ])
         await callback_query.message.edit_text(welcome_text, reply_markup=keyboard, disable_web_page_preview=True)
     except Exception as e:
-        logger.error(f"Error in get_started: {e}")
+        logging.error(f"Error in get_started: {e}")
         await callback_query.answer("An error occurred. Please try again.", show_alert=True)
 
 @app.on_callback_query(filters.regex("view_info"))
@@ -81,7 +81,7 @@ async def view_info(_, callback_query):
         ])
         await callback_query.message.edit_text(info_text, reply_markup=keyboard, disable_web_page_preview=True)
     except Exception as e:
-        logger.error(f"Error in view_info: {e}")
+        logging.error(f"Error in view_info: {e}")
         await callback_query.answer("An error occurred. Please try again.", show_alert=True)
 
 @app.on_callback_query()
