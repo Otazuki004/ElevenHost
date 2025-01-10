@@ -2,7 +2,6 @@ from ElevenHost import app
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from .. import api
-import traceback 
 
 @app.on_message(filters.command(["project", "projects"]))
 async def projects(_, message: Message):
@@ -20,7 +19,7 @@ async def projects(_, message: Message):
 
         if user_projects:
             buttons = [
-                [InlineKeyboardButton(project.get("name"), callback_data=f"project_{project.get('id')}")]
+                [InlineKeyboardButton(project["name"], callback_data=f"project_{project['id']}")]
                 for project in user_projects if project.get("name") and project.get("id")
             ]
             buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="create_project")])
@@ -51,8 +50,7 @@ async def projects(_, message: Message):
             "🚨 An unexpected error occurred. Please try again later or contact support.",
             quote=True
         )
-        logging.error(f"Error in /projects: {traceback.format_exc()}")
-
+        print(f"Error in /projects: {e}")
 
 @app.on_callback_query(filters.regex("^project_"))
 async def view_project(_, callback_query):
@@ -84,13 +82,38 @@ async def view_project(_, callback_query):
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
         print(f"Error in view_project: {e}")
 
-
 @app.on_callback_query(filters.regex("^create_project$"))
 async def create_project(_, callback_query):
     try:
-        await callback_query.answer("Feature coming soon! Stay tuned. 😊", show_alert=True)
+        user_id = callback_query.from_user.id
+        user_name = callback_query.from_user.first_name
+
+        await callback_query.message.edit_text(
+            f"🔨 **Hey {user_name}, please provide a name for your new project.**",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("Cancel", callback_data="cancel_create_project")
+            ]])
+        )
+
+        @app.on_message(filters.text)
+        async def handle_project_name(msg: Message):
+            if msg.from_user.id == user_id:
+                project_name = msg.text
+                success = await api.create_project(project_name, user_id)
+
+                if success:
+                    await msg.reply_text(
+                        f"✅ **Project '{project_name}' created successfully!**\n"
+                        "You can now manage it in the project list.",
+                        quote=True
+                    )
+                    await projects(_, callback_query.message)
+                else:
+                    await msg.reply_text("❌ Failed to create project. Try again later.", quote=True)
+
+                app.remove_handler(handle_project_name)
     except Exception as e:
-        print(f"Error in create_project: {e}")
+        print(f"Error in create_project callback: {e}")
 
 
 @app.on_callback_query(filters.regex("^projects_list$"))
