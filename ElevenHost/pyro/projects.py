@@ -19,7 +19,7 @@ async def projects(_, message: Message):
 
         if user_projects:
             buttons = [
-                [InlineKeyboardButton(project["name"], callback_data=f"project_{project['id']}")]
+                [InlineKeyboardButton(project.get("name"), callback_data=f"project_{project.get('project_id')}")]
                 for project in user_projects if project.get("name") and project.get("id")
             ]
             buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="create_project")])
