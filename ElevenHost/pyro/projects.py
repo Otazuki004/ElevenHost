@@ -24,7 +24,7 @@ async def projects(_, message: Message):
                 if x.get('name') and x.get('project_id'):
                     buttons.append([InlineKeyboardButton(x.get("name"), callback_data=f"project_{x.get('project_id')}")])
             
-            buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="create_project")])
+            buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="select_plans")])
 
             reply_markup = InlineKeyboardMarkup(buttons)
             await message.reply_photo(
@@ -44,7 +44,7 @@ async def projects(_, message: Message):
                     "🔹 Use the button below to create your first project and start hosting!\n"
                 ),
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("➕ Create New Project", callback_data="create_project")]
+                    [InlineKeyboardButton("➕ Create New Project", callback_data="select_plans")]
                 ])
             )
     except Exception as e:
@@ -52,4 +52,4 @@ async def projects(_, message: Message):
         await message.reply_text(
             "🚨 An unexpected error occurred. Please try again later or contact support.",
             quote=True
-                )
+        )
