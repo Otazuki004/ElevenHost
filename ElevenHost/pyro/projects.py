@@ -2,7 +2,7 @@ from ElevenHost import app
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from .. import api
-from ..others import *
+from ..others import ask
 
 @app.on_message(filters.command(["project", "projects"]))
 async def projects(_, message: Message):
