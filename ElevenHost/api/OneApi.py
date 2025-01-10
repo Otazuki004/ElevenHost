@@ -6,11 +6,11 @@ from .methods import *
 
 log = logging.getLogger("OneApi")
 
-class OneApi:
+class OneApi(Methods):
   def __init__(self):
     self.connected = False
     self.url = None
-    self.user_info = user_info
+    
   def connect(self):
     if self.connected: return log.error("You've already connected with OneApi")
     log.info("[^•^] Connecting with OneApi")
