@@ -3,6 +3,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from .. import api
 from ..others import ask
 import logging
+from pyrogram import *
 
 @app.on_callback_query(filters.regex("^project_"))
 async def view_project(_, callback_query):
