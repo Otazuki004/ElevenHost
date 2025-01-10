@@ -71,7 +71,8 @@ async def create_project(_, callback_query):
             name = await ask(user=user_id, chat=callback_query.message.chat.id)
             mano = await api.create_project(name, user_id, plan)
             if mano == True:
-              await callback_query.message.edit_text("✅ Project created successfully!")
+              await callback_query.message.reply("✅ Project created successfully!")
+              await callback_query.message.delete()
               break
             elif mano != False:
               await app.send_message(callback_query.message.chat.id, mano)
