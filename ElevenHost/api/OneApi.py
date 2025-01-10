@@ -73,3 +73,14 @@ class OneApi:
         elif 'error' in r.json(): log.error(f"[!] OneApi error: {r.json().get('error')}")
     except: log.error(traceback.format_exc())
     return False
+  
+  async def delete_project(self, user_id: int, project_id: int):
+    if not self.connected: raise ConnectionError("OneApi isn't connected")
+    try:
+      data = {"user_id": user_id, "project_id": project_id}
+      async with httpx.AsyncClient() as mano:
+        r = await mano.post(f'{self.url}/delete_project/', json=data)
+        if r.status_code == 200: return True
+        elif 'error' in r.json(): log.error(f"[!] OneApi error: {r.json().get('error')}")
+    except: log.error(traceback.format_exc())
+    return False
