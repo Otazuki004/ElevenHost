@@ -48,7 +48,7 @@ async def select_plans(_, query):
             InlineKeyboardButton("Professional", callback_data="?")
           ]
         ])
-        await callback_query.message.edit_text(
+        await query.message.edit_text(
           "Click button below to choose a plan",
           reply_markup=buttons
         )
