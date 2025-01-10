@@ -1,4 +1,4 @@
-from pyrogram import *
+ from pyrogram import *
 from ElevenHost import *
 import asyncio
 import logging
@@ -18,19 +18,26 @@ async def ask_helper(_, client, message):
         return False
     except: pass
 
-async def ask(message, text=None):
+async def ask(message=None, text=None, chat=None, user=None):
     global datas
-    if text: await otazuki.send_message(message.chat.id, text)
-    datas[message.from_user.id] = {}
-    datas[message.from_user.id]['chat'] = message.chat.id
-    datas[message.from_user.id]['Listen'] = True
-    datas[message.from_user.id]['message'] = None
+    chat_id = chat or message.chat.id
+    user_id = user or message.from_user.id
+    
+    if text: await otazuki.send_message(chat_id, text)
+    
+    datas[user_id] = {}
+    datas[user_id]['chat'] = chat_id
+    datas[user_id]['Listen'] = True
+    datas[user_id]['message'] = None
+    
     logging.info(f"Starting listening for input: {datas}")
-    while not datas.get(message.from_user.id).get('message'):
+    
+    while not datas.get(user_id).get('message'):
         await asyncio.sleep(0.3)
-    res = datas.get(message.from_user.id).get('message')
+    
+    res = datas.get(user_id).get('message')
     logging.info(f"Got message {res}")
-    del datas[message.from_user.id]
+    del datas[user_id]
     return res
 
 @otazuki.on_message(filters.text & filters.create(ask_helper))
