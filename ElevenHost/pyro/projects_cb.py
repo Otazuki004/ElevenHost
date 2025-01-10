@@ -35,6 +35,12 @@ async def view_project(_, callback_query):
         logging.error(f"Error in view_project callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
+@app.on_callback_query(filters.regex("select_plans"))
+async def select_plans(_, query):
+    try:
+        pass
+    except: pass
+
 @app.on_callback_query(filters.regex("^create_project$"))
 async def create_project(_, callback_query):
     try:
