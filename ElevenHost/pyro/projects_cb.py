@@ -67,12 +67,19 @@ async def create_project(_, callback_query):
                 InlineKeyboardButton("Cancel", callback_data="cancel_create_project")
             ]])
         )
-        name = await ask(user=user_id, chat=callback_query.message.chat.id)
-        mano = await api.create_project(name, user_id, plan)
-        if mano != True: await callback_query.answer(mano)
-        else: await callback_query.message.edit_text("✅ Project created successfully!")
+        while True:
+            name = await ask(user=user_id, chat=callback_query.message.chat.id)
+            mano = await api.create_project(name, user_id, plan)
+            if mano == True:
+              await callback_query.message.edit_text("✅ Project created successfully!")
+              break
+            elif mano != False:
+              await app.send_message(callback_query.message.chat.id, mano)
+            else: 
+              await app.send_message(callback_query.message.chat.id, "🚨 An error occurred, try again later")
+              break
     except Exception as e:
-        logging.error(f"Error in create_project callback: {e}")
+        logging.error(f"Error in create_project callback: {traceback.format_exc()}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
 @app.on_callback_query(filters.regex("^projects_list$"))
