@@ -30,13 +30,10 @@ async def ask(message=None, text=None, chat=None, user=None):
     datas[user_id]['Listen'] = True
     datas[user_id]['message'] = None
     
-    logging.info(f"Starting listening for input: {datas}")
-    
     while not datas.get(user_id).get('message'):
         await asyncio.sleep(0.3)
     
     res = datas.get(user_id).get('message')
-    logging.info(f"Got message {res}")
     del datas[user_id]
     return res
 
