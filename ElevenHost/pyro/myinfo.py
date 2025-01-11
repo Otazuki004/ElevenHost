@@ -3,6 +3,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from datetime import datetime, timedelta
 from ElevenHost import app
 from .. import api
+from pyrogram import *
 
 plans = {
     'Free': {'price': 0, 'validity': 'Unlimited'},
