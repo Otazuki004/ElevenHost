@@ -3,7 +3,7 @@ import logging
 import traceback
 
 class GetRepos:
-  async def get_repos(user_id: int):
+  async def get_repos(self, user_id: int):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
       data = {"user_id": user_id}
