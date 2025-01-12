@@ -30,7 +30,8 @@ async def buy_100_coins(client, callback_query):
     upi_link = "upi://pay?pa=otazuki@jio&pn=Otazuki&am=49&cu=INR&tn=" + f"{callback_query.from_user.id}_100coins"
     qr = qrcode.make(upi_link)
 
-    qr_image_path = qr.save()
+    qr_image_path = 'qr.png'
+    qr.save(qr_image_path)
 
     await callback_query.message.delete()
     await callback_query.message.reply_photo(
@@ -43,7 +44,8 @@ async def buy_200_coins(client, callback_query):
     upi_link = "upi://pay?pa=otazuki@jio&pn=Otazuki&am=99&cu=INR&tn=" + f"{callback_query.from_user.id}_200coins"
     qr = qrcode.make(upi_link)
 
-    qr_image_path = qr.save()
+    qr_image_path = 'qr.png'
+    qr.save(qr_image_path)
 
     await callback_query.message.delete()
     await callback_query.message.reply_photo(
