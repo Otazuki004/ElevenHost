@@ -13,9 +13,10 @@ async def start(_, message: Message):
     user_name = message.from_user.first_name
 
     if not await api.exists(user_id):
-      registering_message = await message.reply("⏳ Registering your account...")
-      await api.create_user(user_name, user_id)
-      await registering_message.delete()
+      mano_ily = await api.create_user(user_name, user_id)
+      if not mano_ily:
+        mano = InlineKeyboardMarkup([[InlineKeyboardButton("🌟 Get Started", url=f"https://github.com/apps/ElevenHost/installations/new?state={message.from_user.id}")]])
+        return await message.reply("You have to connect with your github account to use this bot.", reply_markup=mano)
     
     caption_text = (
       "𝗘𝗟𝗘𝗩𝗘𝗡 𝗛𝗢𝗦𝗧\n\n"
