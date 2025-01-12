@@ -9,10 +9,10 @@ class GetRepos:
       data = {"user_id": user_id}
       async with httpx.AsyncClient() as client:
         response = await client.post(f'{self.url}/get_repos/', json=data)
-        print(response.json())
+        self.log.info(response.text)
         if response.status_code == 200:
           return response.json().get('message')
-        elif 'error' in response.json():
+        elif 'error' in response.text:
           self.log.error(f"[!] OneApi error: {response.status_code}: {response.text}")
     except:
       self.log.error(traceback.format_exc())
