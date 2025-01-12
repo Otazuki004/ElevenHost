@@ -9,6 +9,8 @@ from pyrogram import filters
 from pyrogram.types import Message
 import aiofiles
 
+cb = DATABASE['cb']
+
 async def aexec(code, app, msg):
     m, from_user, r = msg, msg.from_user, msg.reply_to_message
     exec(
