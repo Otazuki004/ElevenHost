@@ -47,7 +47,7 @@ async def runPyro_Funcs(app:app, msg:Message) -> None:
     oucode = f"📒 ᴏᴜᴛᴘᴜᴛ:\n<pre>{evason}</pre>\n✨ ᴛɪᴍᴇ ᴛᴀᴋᴇɴ: {runcs}ᴍs"
     if len(oucode) > 4000:
         async with aiofiles.open('eval.txt', mode='w') as f:
-            await f.write(runcs)
+            await f.write(str(evason))
         await message.reply_document('eval.txt')
     else:
         await message.edit(oucode)
