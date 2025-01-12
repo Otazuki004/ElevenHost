@@ -12,7 +12,7 @@ class GetRepos:
         if response.status_code == 200:
           return response.json().get('message')
         elif 'error' in response.json():
-          log.error(f"[!] OneApi error: {response.status_code}: {response.text}")
+          self.log.error(f"[!] OneApi error: {response.status_code}: {response.text}")
     except:
-      log.error(traceback.format_exc())
+      self.log.error(traceback.format_exc())
     return False
