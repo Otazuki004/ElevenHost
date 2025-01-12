@@ -7,7 +7,7 @@ class GetRepos:
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
       data = {"user_id": user_id}
-      async with httpx.AsyncClient() as client:
+      async with httpx.AsyncClient(timeout=30) as client:
         response = await client.post(f'{self.url}/get_repos/', json=data)
         self.log.info(response.text)
         if response.status_code == 200:
