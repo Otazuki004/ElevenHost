@@ -10,6 +10,7 @@ class OneApi(Methods):
   def __init__(self):
     self.connected = False
     self.url = None
+    self.log = log
     
   def connect(self):
     if self.connected: return log.error("You've already connected with OneApi")
