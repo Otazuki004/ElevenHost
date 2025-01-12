@@ -3,6 +3,7 @@ import qrcode
 from pyrogram import filters
 from ElevenHost import app
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+import aiofiles.os
 
 @app.on_message(filters.command("shop"))
 async def shop_command(client, message):
@@ -38,6 +39,7 @@ async def buy_100_coins(client, callback_query):
         qr_image_path, 
         caption=f"🖼️ **Scan this QR Code to pay ₹49 for 100 Coins.**\n\n💡 **How to pay:**\n1. Open your UPI app 📱\n2. Scan the QR code 🎯\n3. Confirm payment 🔒\n\nOnce paid, send a screenshot to the Devs for verification. 💬\n\n🔒 **Your coins will be added once verified!**"
     )
+    aiofiles.os.remove(qr_image_path)
 
 @app.on_callback_query(filters.regex("buy_200"))
 async def buy_200_coins(client, callback_query):
@@ -52,3 +54,4 @@ async def buy_200_coins(client, callback_query):
         qr_image_path, 
         caption=f"🖼️ **Scan this QR Code to pay ₹99 for 200 Coins.**\n\n💡 **How to pay:**\n1. Open your UPI app 📱\n2. Scan the QR code 🎯\n3. Confirm payment 🔒\n\nOnce paid, send a screenshot to the Devs for verification. 💬\n\n🔒 **Your coins will be added once verified!**"
     )
+    aiofiles.os.remove(qr_image_path)
