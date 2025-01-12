@@ -14,7 +14,7 @@ async def start(_, message: Message):
     if not await api.exists(user_id):
       mano_ily = await api.create_user(user_name, user_id)
       if not mano_ily:
-        mano = InlineKeyboardMarkup([[InlineKeyboardButton("🌟 Get Started", url=f"https://github.com/apps/ElevenHost/installations/new?state={message.from_user.id}")]])
+        mano = InlineKeyboardMarkup([[InlineKeyboardButton("Connect git", url=f"https://github.com/apps/ElevenHost/installations/new?state={message.from_user.id}")]])
         return await message.reply("You have to connect with your github account to use this bot.", reply_markup=mano)
     
     caption_text = (
