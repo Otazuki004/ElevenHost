@@ -1,6 +1,6 @@
 from ElevenHost import app
 from .. import api
-from pyrogram import *
+from pyrogram import filters
 
 @app.on_message(filters.command("myinfo"))
 async def myinfo_command(client, message):
@@ -10,12 +10,16 @@ async def myinfo_command(client, message):
     coins = user_info.get('coins', 0)
     name = user_info.get('name', 'Unknown')
     projects = user_info.get('projects', 0)
+    github = user_info.get('git', 'Not Linked')
     
     user_info_text = f"""
- **🍃 ᴜsᴇʀ ɪɴғᴏ:**
-    👤 **Name:** {name}
-    🆔 **User ID:** {user_id}
-    🪙 **Coins:** {coins}
-    💼 **Projects:** {projects}"""
+✨ **ᴜsᴇʀ ᴘʀᴏғɪʟᴇ:**  
+┌─────────────  
+🎭 **Name:** {name}  
+🆔 **ID:** `{user_id}`  
+💰 **Coins:** `{coins}`  
+📂 **Projects:** `{projects}`  
+🌐 **GitHub:** `{github}`  
+└─────────────"""
 
-    return await message.reply_text(user_info_text)
+    await message.reply_text(user_info_text)
