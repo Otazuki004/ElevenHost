@@ -6,7 +6,10 @@ from pyrogram import filters
 async def myinfo_command(client, message):
     user_id = message.from_user.id
     user_info = await api.user_info(user_id)
-    
+
+    if not await api.exists(user_id):
+        return await message.reply_text("❌ You are not registered yet. Please use /start to register your account.")
+
     coins = user_info.get('coins', 0)
     name = user_info.get('name', 'Unknown')
     projects = user_info.get('projects', 0)
