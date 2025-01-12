@@ -7,6 +7,7 @@ import logging
 
 @app.on_message(filters.command('start'))
 async def start(_, message: Message):
+  logging.info(f"Start msg received: {message.text}")
   try:
     user_id = message.from_user.id
     user_name = message.from_user.first_name
