@@ -1,3 +1,4 @@
+import os
 import qrcode
 from pyrogram import filters
 from ElevenHost import app
@@ -28,10 +29,14 @@ async def shop_command(client, message):
 async def buy_100_coins(client, callback_query):
     upi_link = "upi://pay?pa=otazuki@jio&pn=Otazuki&am=49&cu=INR&tn=" + f"{callback_query.from_user.id}_100coins"
     qr = qrcode.make(upi_link)
+
+    qr_dir = "/kora/"
+    os.makedirs(qr_dir, exist_ok=True)
     
-    qr_image_path = "/kora/upi_qr_100.png"
+    qr_image_path = os.path.join(qr_dir, "upi_qr_100.png")
     qr.save(qr_image_path)
-    
+
+    await callback_query.message.delete()
     await callback_query.message.reply_photo(
         qr_image_path, 
         caption=f"🖼️ **Scan this QR Code to pay ₹49 for 100 Coins.**\n\n💡 **How to pay:**\n1. Open your UPI app 📱\n2. Scan the QR code 🎯\n3. Confirm payment 🔒\n\nOnce paid, send a screenshot to the Devs for verification. 💬\n\n🔒 **Your coins will be added once verified!**"
@@ -41,10 +46,14 @@ async def buy_100_coins(client, callback_query):
 async def buy_200_coins(client, callback_query):
     upi_link = "upi://pay?pa=otazuki@jio&pn=Otazuki&am=99&cu=INR&tn=" + f"{callback_query.from_user.id}_200coins"
     qr = qrcode.make(upi_link)
+
+    qr_dir = "/kora/"
+    os.makedirs(qr_dir, exist_ok=True)
     
-    qr_image_path = "/kora/upi_qr_200.png"
+    qr_image_path = os.path.join(qr_dir, "upi_qr_200.png")
     qr.save(qr_image_path)
-    
+
+    await callback_query.message.delete()
     await callback_query.message.reply_photo(
         qr_image_path, 
         caption=f"🖼️ **Scan this QR Code to pay ₹99 for 200 Coins.**\n\n💡 **How to pay:**\n1. Open your UPI app 📱\n2. Scan the QR code 🎯\n3. Confirm payment 🔒\n\nOnce paid, send a screenshot to the Devs for verification. 💬\n\n🔒 **Your coins will be added once verified!**"
