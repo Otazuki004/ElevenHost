@@ -14,5 +14,5 @@ class UserInfo:
         if response.status_code == 200:
           return response.json().get('message')
     except:
-      log.error(traceback.format_exc())
+      self.log.error(traceback.format_exc())
     return False
