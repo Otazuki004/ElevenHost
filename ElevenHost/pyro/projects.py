@@ -33,7 +33,6 @@ async def projects(_, message: Message):
         caption=(
           f"📂 **Hello {user_name}, here are your projects:**\n\n"
           "🔹 Click on a project to view more details or manage it.\n"
-          f"🔹 Plan: {user_plan} | Limit: {len(user_projects)}/{project_limit}"
         ),
         reply_markup=reply_markup
       )
@@ -43,7 +42,6 @@ async def projects(_, message: Message):
         caption=(
           f"📂 **Hello {user_name}, you currently have no projects.**\n\n"
           "🔹 Use the button below to create your first project and start hosting!\n"
-          f"🔹 Plan: {user_plan} | Limit: 0/{project_limit}"
         ),
         reply_markup=InlineKeyboardMarkup([
           [InlineKeyboardButton("➕ Create New Project", callback_data="select_plans")]
