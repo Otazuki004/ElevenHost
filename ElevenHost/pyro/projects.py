@@ -51,7 +51,7 @@ async def projects(_, message: Message):
                     f"🔹 Plan: {user_plan} | Limit: 0/{project_limit}"
                 ),
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("➕ Create New Project", callback_data="create_project")]
+                    [InlineKeyboardButton("➕ Create New Project", callback_data="select_plans")]
                 ])
             )
     except Exception as e:
