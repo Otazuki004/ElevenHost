@@ -4,6 +4,7 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from pyrogram.errors import UserAlreadyParticipant
 import logging
+import asyncio
 from pyrogram.enums import ChatType
 
 @app.on_message(filters.command('start'))
@@ -19,6 +20,7 @@ async def start(_, message: Message):
           return await message.reply("You cannot register in groups, please send /start on private.")
         mano = InlineKeyboardMarkup([[InlineKeyboardButton("Connect git", url=f"https://github.com/apps/ElevenHost/installations/new?state={message.from_user.id}")]])
         return await message.reply("You have to connect with your github account to use this bot.", reply_markup=mano)
+      else: asyncio.create_task(app.send_message(-1001859707851, f"**New user registered**\n\n**Name:** {message.from_user.first_name}\n**User Id:** {message.from_user.id}"))
     
     caption_text = (
       "𝗘𝗟𝗘𝗩𝗘𝗡 𝗛𝗢𝗦𝗧\n\n"
