@@ -47,8 +47,10 @@ async def deploy_command(_, message: Message):
 @app.on_callback_query(filters.regex("^deploy_"))
 async def fetch_project_logs(_, callback_query):
     try:
+        user_id = callback_query.from_user.id
         project_id = callback_query.data.split("_")[1]
-        project_details = await api.get_project_details(project_id)
+        project_details = await api.get_projects(user_id, project_id)
+        user_info = await api.user_info(user_id)
 
         if not project_details:
             return await callback_query.answer("⚠️ Unable to fetch project details. Try again later.", show_alert=True)
@@ -56,12 +58,11 @@ async def fetch_project_logs(_, callback_query):
         await callback_query.message.edit_text("🔄 **Fetching deployment logs...**")
         await asyncio.sleep(2)
 
-        project_name = project_details.get("name", "Unnamed Project")
-        user_id = project_details.get("user_id", "Unknown User")
-        github = project_details.get("github", "Not Connected")
-        build_status = project_details.get("status", "Unknown")
+        project_name = project_details.get("name", "Unknown")
+        github = user_info.get('git', 'Not linked.')
+        build_status = project_details.get("build_status", "Offline")
         logs = project_details.get("logs", "No logs available.")
-        connected_repo = project_details.get("repo", "Not Connected")
+        connected_repo = project_details.get("repo", "Not connected.")
 
         status_icon = "🟢 Alive" if build_status.lower() == "alive" else "🔴 Offline"
         reply_markup = InlineKeyboardMarkup([
