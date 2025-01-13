@@ -30,7 +30,7 @@ async def projects(_, message: Message):
                     )
 
             if len(user_projects) < project_limit:
-                buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="create_project")])
+                buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="select_plans")])
 
             reply_markup = InlineKeyboardMarkup(buttons)
             await message.reply_photo(
