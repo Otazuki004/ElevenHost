@@ -40,7 +40,7 @@ async def view_project(_, callback_query):
     reply_markup = InlineKeyboardMarkup([
       [InlineKeyboardButton("⛔ Stop", callback_data=f"stop_{project_id}"),
        InlineKeyboardButton("♻️ Redeploy", callback_data=f"redeploy_{project_id}")],
-      [InlineKeyboardButton("🔄 Change Repo", callback_data=f"change_repo_{project_id}"),
+      [InlineKeyboardButton("🔄 Change Repo", callback_data=f"change_repo_{project_id}_{user_id}"),
        InlineKeyboardButton("🔃 Refresh", callback_data=f"refresh_{project_id}")]
     ])
 
