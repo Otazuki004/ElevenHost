@@ -57,10 +57,10 @@ async def view_project(_, callback_query):
       f"🔹 **ROM:** {rom}\n"
       f"🔹 **Repo:** {github}\n\n"
       f"📜 **Logs:**\n"
-      f"<pre>{logs[200:]}</pre>",
+      f"<pre>{logs[-400:]}</pre>",
       reply_markup=reply_markup
     )
-    if len(logs) > 200:
+    if len(logs) >= 400:
       async with aiofiles.open(f'log{user_id}.txt', mode='w') as fk:
         await fk.write(logs)
       await callback_query.message.reply_document(f'log{user_id}.txt')
