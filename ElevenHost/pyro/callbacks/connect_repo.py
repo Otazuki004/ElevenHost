@@ -5,10 +5,10 @@ from ElevenHost.others import *
 import logging
 import traceback 
 import asyncio
-from .view_project import view_project
 
 @app.on_callback_query(filters.regex("^repo_"))
 async def connect_repo(_, callback_query):
+  from .view_project import view_project
   try:
     user_id = callback_query.from_user.id
     data = callback_query.data.split("_")
