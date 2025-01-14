@@ -7,140 +7,111 @@ from pyrogram import *
 
 @app.on_callback_query(filters.regex("^project_"))
 async def view_project(_, callback_query):
-    try:
-        project_id = callback_query.data.split("_")[1]
-        project_details = await api.get_project_details(project_id)
+  try:
+    project_id = callback_query.data.split("_")[1]
+    project_details = await api.get_project_details(project_id)
 
-        if project_details:
-            project_name = project_details.get("name", "Unnamed Project")
-            created_at = project_details.get("created_at", "Unknown Date")
-            status = project_details.get("status", "Unknown Status")
+    if project_details:
+      project_name = project_details.get("name", "Unnamed Project")
+      created_at = project_details.get("created_at", "Unknown Date")
+      status = project_details.get("status", "Unknown Status")
 
-            details = (
-                f"📋 **Project Name:** {project_name}\n"
-                f"📅 **Created On:** {created_at}\n"
-                f"📊 **Status:** {status}\n\n"
-                "Use the buttons below to manage this project."
-            )
+      details = (
+        f"📋 **Project Name:** {project_name}\n"
+        f"📅 **Created On:** {created_at}\n"
+        f"📊 **Status:** {status}\n\n"
+        "Use the buttons below to manage this project."
+      )
 
-            reply_markup = InlineKeyboardMarkup([
-                [InlineKeyboardButton("🔄 Restart", callback_data=f"restart_{project_id}"),
-                 InlineKeyboardButton("❌ Delete", callback_data=f"delete_{project_id}")],
-                [InlineKeyboardButton("⬅️ Back to Projects", callback_data="projects_list")]
-            ])
-            await callback_query.message.edit_text(details, reply_markup=reply_markup)
-        else:
-            await callback_query.answer("⚠️ Unable to fetch project details. Try again later.", show_alert=True)
-    except Exception as e:
-        logging.error(f"Error in view_project callback: {e}")
-        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+      reply_markup = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔄 Restart", callback_data=f"restart_{project_id}"),
+         InlineKeyboardButton("❌ Delete", callback_data=f"delete_{project_id}")],
+        [InlineKeyboardButton("⬅️ Back to Projects", callback_data="projects_list")]
+      ])
+      await callback_query.message.edit_text(details, reply_markup=reply_markup)
+    else:
+      await callback_query.answer("⚠️ Unable to fetch project details. Try again later.", show_alert=True)
+  except Exception as e:
+    logging.error(f"Error in view_project callback: {e}")
+    await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
 @app.on_callback_query(qfilter("select_plans"))
 async def select_plans(_, query):
-    try:
-        buttons = InlineKeyboardMarkup([
-          [
-            InlineKeyboardButton("Free", callback_data="create_project_free"),
-            InlineKeyboardButton("Basic", callback_data="create_project_basic")
-          ],
-          [
-            InlineKeyboardButton("Advanced", callback_data="create_project_advance"),
-            InlineKeyboardButton("Professional", callback_data="create_project_pro") 
-          ]
-        ])
-        await query.message.edit_text(
-          "Click button below to choose a plan",
-          reply_markup=buttons
-        )
-    except: pass
+  try:
+    buttons = InlineKeyboardMarkup([
+      [
+        InlineKeyboardButton("Free", callback_data="create_project_free"),
+        InlineKeyboardButton("Basic", callback_data="create_project_basic")
+      ],
+      [
+        InlineKeyboardButton("Advanced", callback_data="create_project_advance"),
+        InlineKeyboardButton("Professional", callback_data="create_project_pro") 
+      ]
+    ])
+    await query.message.edit_text(
+      "Click button below to choose a plan",
+      reply_markup=buttons
+    )
+  except: pass
 
 @app.on_callback_query(qfilter("create_project"))
 async def create_project(_, callback_query):
-    try:
-        data = callback_query.data
-        user_id = callback_query.from_user.id
-        user_name = callback_query.from_user.first_name
-        plan = data.replace('create_project_', '')
-        await callback_query.message.edit_text(
-            f"🔨 **Hey {user_name}, please provide a name for your new project.**",
-            reply_markup=InlineKeyboardMarkup([[
-                InlineKeyboardButton("Cancel", callback_data="cancel_create_project")
-            ]])
-        )
-        while True:
-            name = await ask(user=user_id, chat=callback_query.message.chat.id)
-            mano = await api.create_project(name, user_id, plan)
-            if mano == True:
-              await callback_query.message.reply("✅ Project created successfully!")
-              await callback_query.message.delete()
-              break
-            elif mano != False:
-              await app.send_message(callback_query.message.chat.id, mano)
-              if 'insufficient' in mano.lower(): break 
-            else: 
-              await app.send_message(callback_query.message.chat.id, "🚨 An error occurred, try again later")
-              break
-    except Exception as e:
-        logging.error(f"Error in create_project callback: {traceback.format_exc()}")
-        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+  try:
+    data = callback_query.data
+    user_id = callback_query.from_user.id
+    user_name = callback_query.from_user.first_name
+    plan = data.replace('create_project_', '')
+    await callback_query.message.edit_text(
+      f"🔨 **Hey {user_name}, please provide a name for your new project.**",
+      reply_markup=InlineKeyboardMarkup([[
+        InlineKeyboardButton("Cancel", callback_data="cancel_create_project")
+      ]])
+    )
+    while True:
+      name = await ask(user=user_id, chat=callback_query.message.chat.id)
+      mano = await api.create_project(name, user_id, plan)
+      if mano == True:
+        await callback_query.message.reply("✅ Project created successfully!")
+        await callback_query.message.delete()
+        break
+      elif mano != False:
+        await app.send_message(callback_query.message.chat.id, mano)
+        if 'insufficient' in mano.lower(): break 
+      else: 
+        await app.send_message(callback_query.message.chat.id, "🚨 An error occurred, try again later")
+        break
+  except Exception as e:
+    logging.error(f"Error in create_project callback: {traceback.format_exc()}")
+    await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
 @app.on_callback_query(filters.regex("^projects_list$"))
 async def projects_list(_, callback_query):
-    try:
-        user_id = callback_query.from_user.id
-        user_projects = await api.get_projects(user_id)
+  try:
+    user_id = callback_query.from_user.id
+    user_projects = await api.get_projects(user_id)
 
-        if user_projects:
-            buttons = [
-                [InlineKeyboardButton(project.get("name"), callback_data=f"project_{project.get('project_id')}")]
-                for project in user_projects if project.get("name") and project.get("project_id")
-            ]
-            buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="create_project")])
+    if user_projects:
+      buttons = [
+        [InlineKeyboardButton(project.get("name"), callback_data=f"project_{project.get('project_id')}")]
+        for project in user_projects if project.get("name") and project.get("project_id")
+      ]
+      buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="create_project")])
 
-            reply_markup = InlineKeyboardMarkup(buttons)
-            await callback_query.message.edit_text(
-                "📂 **Here are your projects:**\n\n"
-                "🔹 Click on a project to view more details or manage it.\n"
-                "🔹 Create a new project to start something fresh!",
-                reply_markup=reply_markup
-            )
-        else:
-            await callback_query.message.edit_text(
-                "📂 **You currently have no projects.**\n\n"
-                "🔹 Use the button below to create your first project and start hosting!",
-                reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("➕ Create New Project", callback_data="create_project")]
-                ])
-            )
-    except Exception as e:
-        logging.error(f"Error in projects_list callback: {e}")
-        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
-
-@app.on_callback_query(filters.regex("^restart_"))
-async def restart_project(_, callback_query):
-    try:
-        project_id = callback_query.data.split("_")[1]
-        success = await api.restart_project(project_id)
-
-        if success:
-            await callback_query.answer("✅ Project restarted successfully.", show_alert=True)
-        else:
-            await callback_query.answer("❌ Failed to restart the project. Try again later.", show_alert=True)
-    except Exception as e:
-        logging.error(f"Error in restart_project callback: {e}")
-        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
-
-@app.on_callback_query(filters.regex("^delete_"))
-async def delete_project(_, callback_query):
-    try:
-        project_id = callback_query.data.split("_")[1]
-        success = await api.delete_project(project_id)
-
-        if success:
-            await callback_query.answer("✅ Project deleted successfully.", show_alert=True)
-            await projects_list(_, callback_query)
-        else:
-            await callback_query.answer("❌ Failed to delete the project. Try again later.", show_alert=True)
-    except Exception as e:
-        logging.error(f"Error in delete_project callback: {e}")
-        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+      reply_markup = InlineKeyboardMarkup(buttons)
+      await callback_query.message.edit_text(
+        "📂 **Here are your projects:**\n\n"
+        "🔹 Click on a project to view more details or manage it.\n"
+        "🔹 Create a new project to start something fresh!",
+        reply_markup=reply_markup
+      )
+    else:
+      await callback_query.message.edit_text(
+        "📂 **You currently have no projects.**\n\n"
+        "🔹 Use the button below to create your first project and start hosting!",
+        reply_markup=InlineKeyboardMarkup([
+          [InlineKeyboardButton("➕ Create New Project", callback_data="create_project")]
+        ])
+      )
+  except Exception as e:
+    logging.error(f"Error in projects_list callback: {e}")
+    await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
