@@ -5,7 +5,7 @@ from .. import api
 from ..others import ask, qfilter
 import logging
 import asyncio
-import traceback 
+
 
 @app.on_message(filters.command(["project", "projects"]))
 async def projects(_, message: Message):
@@ -131,7 +131,7 @@ async def fetch_project_logs(_, callback_query):
             )
 
         project_name = project_details.get("name", "Unknown")
-        github = project_details.get("repo_name", "Not linked.")
+        github = project_details.get("repo", "Not linked.")
         build_status = project_details.get("status", "Off")
         logs = project_details.get("logs", "No logs available.")
         plan = project_details.get("plan", "Free")
@@ -158,11 +158,11 @@ async def fetch_project_logs(_, callback_query):
             f"🔹 **ROM:** {rom}\n"
             f"🔹 **Repo:** {github}\n\n"
             f"📜 **Logs:**\n"
-            f"<pre>{logs}</pre>",
+            f"```\n{logs}\n```",
             reply_markup=reply_markup
         )
     except Exception as e:
-        logging.error(f"Error in fetch_project_logs callback: {traceback.format_exc()}")
+        logging.error(f"Error in fetch_project_logs callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
 @app.on_callback_query(filters.regex("^repo_"))
@@ -239,29 +239,28 @@ async def change_repo(_, callback_query):
         repos = await api.get_repos(user_id)
         if not repos:
             return await callback_query.answer("⚠️ No repositories found.", show_alert=True)
-
+            
         buttons = [
-            [InlineKeyboardButton(repo.get("name"), callback_data=f"select_repo_{project_id}_{repo.get('id')}")]
+            [InlineKeyboardButton(repo.get("name"), callback_data=f"repo_{project_id}_{repo.get('id')}")]
             for repo in repos
         ]
         buttons.append([InlineKeyboardButton("❌ Cancel", callback_data=f"cancel_change_repo_{project_id}")])
 
         await callback_query.message.edit_text(
-            "🔄 **Select a repository to change and connect to the project:**",
+            "🔄 **Select a repository to change to:**",
             reply_markup=InlineKeyboardMarkup(buttons)
         )
     except Exception as e:
         logging.error(f"Error in change_repo callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
-
-@app.on_callback_query(filters.regex("^select_repo_"))
-async def select_repo(_, callback_query):
+@app.on_callback_query(filters.regex("^repo_"))
+async def connect_repo(_, callback_query):
     try:
         user_id = callback_query.from_user.id
         data = callback_query.data.split("_")
-        project_id = int(data[2])
-        repo_id = int(data[3])
+        project_id = int(data[1])
+        repo_id = int(data[2])
 
         success = await api.set_repo(user_id, project_id, repo_id)
         if success:
@@ -270,14 +269,23 @@ async def select_repo(_, callback_query):
         else:
             await callback_query.answer("❌ Failed to connect the repository. Try again.", show_alert=True)
     except Exception as e:
-        logging.error(f"Error in select_repo callback: {e}")
+        logging.error(f"Error in connect_repo callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
         
+@app.on_callback_query(filters.regex("^cancel_create_project"))
+async def cancel_create_project(_, callback_query):
+    try:
+        await callback_query.message.edit_text("❌ **Project creation cancelled.**", reply_markup=None)
+    except Exception as e:
+        logging.error(f"Error in cancel_create_project callback: {e}")
+        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+
+
 @app.on_callback_query(filters.regex("^cancel_change_repo_"))
 async def cancel_change_repo(_, callback_query):
     try:
-        project_id = int(callback_query.data.split("_")[2])
-        await fetch_project_logs(_, callback_query)
+        project_id = int(callback_query.data.split("_")[3])
+        await callback_query.message.edit_text("❌ **Repository change cancelled.**", reply_markup=None)
     except Exception as e:
         logging.error(f"Error in cancel_change_repo callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
