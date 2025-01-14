@@ -9,7 +9,6 @@ class GetRepos:
       data = {"user_id": user_id}
       async with httpx.AsyncClient(timeout=30) as client:
         response = await client.post(f'{self.url}/get_repos/', json=data)
-        self.log.info(response.text)
         if response.status_code == 200:
           return response.json().get('message')
         elif 'error' in response.text:
