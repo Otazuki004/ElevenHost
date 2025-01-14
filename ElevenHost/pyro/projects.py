@@ -5,7 +5,7 @@ from .. import api
 from ..others import ask, qfilter
 import logging
 import asyncio
-
+import traceback 
 
 @app.on_message(filters.command(["project", "projects"]))
 async def projects(_, message: Message):
