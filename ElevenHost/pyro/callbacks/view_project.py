@@ -5,6 +5,7 @@ from ElevenHost.others import *
 import logging
 import traceback 
 import asyncio
+import aiofiles
 
 @app.on_callback_query(filters.regex("^deploy_"))
 async def view_project(_, callback_query):
@@ -56,9 +57,14 @@ async def view_project(_, callback_query):
       f"🔹 **ROM:** {rom}\n"
       f"🔹 **Repo:** {github}\n\n"
       f"📜 **Logs:**\n"
-      f"<pre>{logs}</pre>",
+      f"<pre>{logs[200:]}</pre>",
       reply_markup=reply_markup
     )
+    if len(logs) > 200:
+      async with aiofiles.open(f'log{user_id}.txt', mode='w') as fk:
+        await fk.write(logs)
+      await message.reply_document(f'log{user_id}.txt')
+      await run(f'rm -rf log{user_id}.txt')
   except Exception as e:
     logging.error(f"Error in fetch_project_logs callback: {e}")
     await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
