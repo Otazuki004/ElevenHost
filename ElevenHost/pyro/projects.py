@@ -131,7 +131,7 @@ async def fetch_project_logs(_, callback_query):
             )
 
         project_name = project_details.get("name", "Unknown")
-        github = project_details.get("repo", "Not linked.")
+        github = project_details.get("repo_name", "Not linked.")
         build_status = project_details.get("status", "Off")
         logs = project_details.get("logs", "No logs available.")
         plan = project_details.get("plan", "Free")
