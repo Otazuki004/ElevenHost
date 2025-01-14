@@ -231,3 +231,60 @@ async def refresh_project(_, callback_query):
     except Exception as e:
         logging.error(f"Error in refresh_project callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+
+@app.on_callback_query(filters.regex("^change_repo_"))
+async def change_repo(_, callback_query):
+    try:
+        user_id = callback_query.from_user.id
+        project_id = int(callback_query.data.split("_")[1])
+
+        repos = await api.get_repos(user_id)
+        project_details = await api.project_info(user_id, project_id)
+        connected_repo = project_details.get("repo_id", None)
+
+        if not repos:
+            return await callback_query.answer("⚠️ No repositories available to connect.", show_alert=True)
+
+        repo_buttons = [
+            [InlineKeyboardButton(repo.get("name"), callback_data=f"repo_change_{project_id}_{repo.get('id')}")]
+            for repo in repos if repo.get("id") != connected_repo
+        ]
+
+        repo_buttons.append([InlineKeyboardButton("❌ Cancel", callback_data=f"cancel_change_repo_{project_id}")])
+
+        await callback_query.message.edit_text(
+            "🔄 **Select a repository to change and connect:**",
+            reply_markup=InlineKeyboardMarkup(repo_buttons)
+        )
+    except Exception as e:
+        logging.error(f"Error in change_repo callback: {e}")
+        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+
+@app.on_callback_query(filters.regex("^repo_change_"))
+async def connect_new_repo(_, callback_query):
+    try:
+        user_id = callback_query.from_user.id
+        data = callback_query.data.split("_")
+        project_id = int(data[2])
+        new_repo_id = int(data[3])
+
+        success = await api.set_repo(user_id, project_id, new_repo_id)
+        if success:
+            await callback_query.message.edit_text(
+                "✅ Repository changed and connected successfully!"
+            )
+            await fetch_project_logs(_, callback_query)
+        else:
+            await callback_query.answer("❌ Failed to change the repository. Try again.", show_alert=True)
+    except Exception as e:
+        logging.error(f"Error in connect_new_repo callback: {e}")
+        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+
+@app.on_callback_query(filters.regex("^cancel_change_repo_"))
+async def cancel_change_repo(_, callback_query):
+    try:
+        project_id = int(callback_query.data.split("_")[2])
+        await fetch_project_logs(_, callback_query)
+    except Exception as e:
+        logging.error(f"Error in cancel_change_repo callback: {e}")
+        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
