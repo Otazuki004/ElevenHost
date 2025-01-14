@@ -3,11 +3,12 @@ from .. import *
 import httpx
 from pyrogram.enums import ChatType
 from pyrogram.types import *
+from .start import start
 
 @app.on_message(filters.command("git"))
 async def git(_, message):
   if not message.chat.type == ChatType.PRIVATE: return await message.reply("This command only works in private")
-  elif not await api.exists(message.from_user.id): return await message.reply("❌ You are not registered yet. Please use /start to register your account.")
+  elif not await api.exists(message.from_user.id): return await start(app, message)
   love = await message.reply("Loading...")
   user = await api.user_info(message.from_user.id)
 
