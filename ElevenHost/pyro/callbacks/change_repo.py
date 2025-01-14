@@ -18,7 +18,7 @@ async def change_repo(_, callback_query):
       return await callback_query.answer("⚠️ No repositories found.", show_alert=True)
       
     buttons = [
-      [InlineKeyboardButton(repo.get("name"), callback_data=f"repo_{project_id}_{repo.get('id')}")]
+      [InlineKeyboardButton(repo.get("name"), callback_data=f"repo_{project_id}_{repo.get('id')}_{user_id}")]
       for repo in repos
     ]
     buttons.append([InlineKeyboardButton("❌ Cancel", callback_data=f"cancel_change_repo_{project_id}")])
