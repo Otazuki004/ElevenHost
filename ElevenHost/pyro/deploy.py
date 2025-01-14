@@ -28,7 +28,7 @@ async def deploy_command(_, message: Message):
         buttons = []
         for project in user_projects:
             project_name = project.get("name")
-            project_id = project.get("id")
+            project_id = project.get("project_id")
             if project_name and project_id:
                 buttons.append([InlineKeyboardButton(project_name, callback_data=f"deploy_{project_id}")])
 
