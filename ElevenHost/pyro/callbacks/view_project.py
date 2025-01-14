@@ -56,7 +56,7 @@ async def view_project(_, callback_query):
       f"🔹 **ROM:** {rom}\n"
       f"🔹 **Repo:** {github}\n\n"
       f"📜 **Logs:**\n"
-      f"```\n{logs}\n```",
+      f"<pre>{logs}</pre>",
       reply_markup=reply_markup
     )
   except Exception as e:
