@@ -150,9 +150,7 @@ async def fetch_project_logs(_, callback_query):
             f"✨ **Eleven Server**\n\n"
             f"📂 **Project Info:**\n"
             f"🔹 **Name:** {project_name}\n"
-            f"🔹 **ID:** {project_id}\n\n"
-            f"👤 **User Info:**\n"
-            f"🔹 **ID:** {user_id}\n"
+            f"🔹 **ID:** {project_id}\n"
             f"🔹 **Plan:** {plan}\n\n"
             f"⚙️ **Build Info:**\n"
             f"🔹 **Status:** {status_icon}\n"
@@ -160,7 +158,7 @@ async def fetch_project_logs(_, callback_query):
             f"🔹 **ROM:** {rom}\n"
             f"🔹 **Repo:** {github}\n\n"
             f"📜 **Logs:**\n"
-            f"```\n{logs}\n```",
+            f"```{logs}\n```",
             reply_markup=reply_markup
         )
     except Exception as e:
