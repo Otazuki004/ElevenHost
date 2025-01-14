@@ -9,8 +9,8 @@ import aiofiles.os
 async def shop_command(client, message):
     keyboard = InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("🪙 100 Coins - ₹49", callback_data="buy_100"),
-            InlineKeyboardButton("🪙 200 Coins - ₹99", callback_data="buy_200")
+            InlineKeyboardButton("🪙 100 Coins", callback_data="buy_100"),
+            InlineKeyboardButton("🪙 200 Coins", callback_data="buy_200")
         ]
     ])
 
