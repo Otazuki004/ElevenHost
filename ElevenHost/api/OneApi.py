@@ -23,10 +23,10 @@ class OneApi(Methods):
     except:
       log.error(traceback.format_exc())
   
-  async def exists(self, user_id: int, full_check=False):
+  async def exists(self, user_id: int):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
-      data = {"user_id": user_id, 'full_check': full_check}
+      data = {"user_id": user_id}
       async with httpx.AsyncClient() as client:
         response = await client.post(f'{self.url}/exists/', json=data)
         if response.status_code == 200:
