@@ -115,11 +115,8 @@ async def fetch_project_logs(_, callback_query):
         if not project_details:
             return await callback_query.answer("⚠️ Unable to fetch project details. Try again later.", show_alert=True)
 
-        if project_details.get("repo") == "Not set":
+        if project_details.get("repo") == 0:
             repos = await api.get_repos(user_id)
-            if not repos:
-                return await callback_query.answer("⚠️ No connected repositories found.", show_alert=True)
-
             buttons = [
                 [InlineKeyboardButton(repo.get("name"), callback_data=f"repo_{project_id}_{repo.get('id')}")]
                 for repo in repos
