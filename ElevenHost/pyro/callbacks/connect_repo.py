@@ -9,11 +9,13 @@ import asyncio
 @app.on_callback_query(filters.regex("^repo_"))
 async def connect_repo(_, callback_query):
   try:
-    user_id = callback_query.from_user.id
+    user_id = int(callback_query.from_user.id)
     data = callback_query.data.split("_")
     project_id = int(data[1])
     repo_id = int(data[2])
-
+    if user_id != int(data[3]):
+      return await callback_query.answer("This is not for you!")
+      
     success = await api.set_repo(user_id, project_id, repo_id)
     if success:
         await callback_query.message.edit_text("✅ Repository connected successfully!")
