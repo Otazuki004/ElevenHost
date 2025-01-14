@@ -1,6 +1,6 @@
 from pyrogram import *
 from ElevenHost import *
-from pyrogram.type import *
+from pyrogram.types import *
 from ElevenHost.others import *
 import logging
 import traceback 
