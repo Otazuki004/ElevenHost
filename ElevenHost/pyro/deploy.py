@@ -5,6 +5,8 @@ from .. import api
 import asyncio
 import logging
 
+logging.basicConfig(level=logging.ERROR)
+
 @app.on_message(filters.command("deploy"))
 async def deploy_command(_, message: Message):
     try:
@@ -23,10 +25,15 @@ async def deploy_command(_, message: Message):
                 "🔹 Use /projects to create your first project and start hosting!"
             )
 
-        buttons = [
-            [InlineKeyboardButton(project.get("name"), callback_data=f"deploy_{project.get('id')}")]
-            for project in user_projects if project.get("name") and project.get("id")
-        ]
+        buttons = []
+        for project in user_projects:
+            project_name = project.get("name")
+            project_id = project.get("id")
+            if project_name and project_id:
+                buttons.append([InlineKeyboardButton(project_name, callback_data=f"deploy_{project_id}")])
+
+        if not buttons:
+            return await message.reply_text("⚠️ No valid projects found to display.")
 
         await message.reply_photo(
             photo="https://i.imgur.com/6Die0Ov.jpeg",
