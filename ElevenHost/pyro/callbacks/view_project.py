@@ -66,5 +66,5 @@ async def view_project(_, callback_query):
       await message.reply_document(f'log{user_id}.txt')
       await run(f'rm -rf log{user_id}.txt')
   except Exception as e:
-    logging.error(f"Error in fetch_project_logs callback: {e}")
+    logging.error(f"Error in view_project callback: {traceback.format_exc()}")
     await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
