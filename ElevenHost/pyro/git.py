@@ -12,7 +12,7 @@ async def git(_, message):
   user = await api.user_info(message.from_user.id)
 
   async with httpx.AsyncClient() as mano:
-    response = await mano.get(f"https://api.github.com/users/{user.get('git'}")
+    response = await mano.get(f"https://api.github.com/users/{user.get('git')}")
     response = response.json()
     bio, followers, following = response.get('bio'), response.get('followers'), response.get('following')
   
