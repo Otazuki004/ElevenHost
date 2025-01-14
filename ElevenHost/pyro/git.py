@@ -1,4 +1,4 @@
-from pyrogram import 
+from pyrogram import *
 from .. import *
 import httpx
 from pyrogram.enums import ChatType
