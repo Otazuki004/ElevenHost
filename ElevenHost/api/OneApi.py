@@ -23,7 +23,7 @@ class OneApi(Methods):
     except:
       log.error(traceback.format_exc())
   
-  async def exists(self, user_id: int, full_check=True):
+  async def exists(self, user_id: int, full_check=False):
     if not self.connected: raise ConnectionError("OneApi isn't connected")
     try:
       data = {"user_id": user_id, 'full_check': full_check}
