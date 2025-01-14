@@ -10,7 +10,7 @@ class SetRepo:
         response = await client.post(f'{self.url}/set_repo/', json=data)
         if response.status_code == 200:
           return True
-        self.log.debug(f"Set repo 13: {response.text}")
+        self.log.info(f"Set repo 13: {response.text}")
     except:
       self.log.error(traceback.format_exc())
     return False
