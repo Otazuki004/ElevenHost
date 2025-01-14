@@ -13,22 +13,21 @@ async def deploy_command(_, message: Message):
 
         if not await api.exists(user_id):
             return await message.reply_text(
-                "❌ You are not registered yet. Please use /start to register your account.",
-                quote=True
+                "❌ You are not registered yet. Please use /start to register your account."
             )
 
         user_projects = await api.get_projects(user_id)
         if not user_projects:
             return await message.reply_text(
                 "📂 **You don't have any projects yet.**\n\n"
-                "🔹 Use /projects to create your first project and start hosting!",
-                quote=True
+                "🔹 Use /projects to create your first project and start hosting!"
             )
 
         buttons = [
-            [InlineKeyboardButton(project.get("name"), callback_data=f"deploy_{project.get('project_id')}")]
-            for project in user_projects if project.get("name") and project.get("project_id")
+            [InlineKeyboardButton(project.get("name"), callback_data=f"deploy_{project.get('id')}")]
+            for project in user_projects if project.get("name") and project.get("id")
         ]
+
         await message.reply_photo(
             photo="https://i.imgur.com/6Die0Ov.jpeg",
             caption=(
@@ -39,32 +38,42 @@ async def deploy_command(_, message: Message):
         )
     except Exception as e:
         logging.error(f"Error in /deploy command: {e}")
-        await message.reply_text(
-            "🚨 An unexpected error occurred. Please try again later or contact support.",
-            quote=True
-        )
+        await message.reply_text("🚨 An unexpected error occurred. Please try again later or contact support.")
 
 @app.on_callback_query(filters.regex("^deploy_"))
 async def fetch_project_logs(_, callback_query):
     try:
         user_id = callback_query.from_user.id
-        project_id = callback_query.data.split("_")[1]
-        project_details = await api.get_projects(user_id, project_id)
-        user_info = await api.user_info(user_id)
+        project_id = int(callback_query.data.split("_")[1])
+        project_details = await api.project_info(user_id, project_id)
 
         if not project_details:
             return await callback_query.answer("⚠️ Unable to fetch project details. Try again later.", show_alert=True)
 
-        await callback_query.message.edit_text("🔄 **Fetching deployment logs...**")
-        await asyncio.sleep(2)
+        if project_details.get("repo") == "Not set":
+            repos = await api.get_repos(user_id)
+            if not repos:
+                return await callback_query.answer("⚠️ No connected repositories found.", show_alert=True)
+
+            buttons = [
+                [InlineKeyboardButton(repo.get("name"), callback_data=f"repo_{project_id}_{repo.get('id')}")]
+                for repo in repos
+            ]
+
+            return await callback_query.message.edit_text(
+                "🔄 **Select a repository to connect:**",
+                reply_markup=InlineKeyboardMarkup(buttons)
+            )
 
         project_name = project_details.get("name", "Unknown")
-        github = user_info.get('git', 'Not linked.')
-        build_status = project_details.get("build_status", "Offline")
+        github = project_details.get("repo", "Not linked.")
+        build_status = project_details.get("status", "Off")
         logs = project_details.get("logs", "No logs available.")
-        connected_repo = project_details.get("repo", "Not connected.")
+        plan = project_details.get("plan", "Free")
+        ram = project_details.get("ram", "None")
+        rom = project_details.get("rom", "None")
 
-        status_icon = "🟢 Alive" if build_status.lower() == "alive" else "🔴 Offline"
+        status_icon = "🟢 Alive" if build_status.lower().startswith("alive") else "🔴 Offline"
         reply_markup = InlineKeyboardMarkup([
             [InlineKeyboardButton("⛔ Stop", callback_data=f"stop_{project_id}"),
              InlineKeyboardButton("♻️ Redeploy", callback_data=f"redeploy_{project_id}")],
@@ -79,10 +88,12 @@ async def fetch_project_logs(_, callback_query):
             f"🔹 **ID:** {project_id}\n\n"
             f"👤 **User Info:**\n"
             f"🔹 **ID:** {user_id}\n"
-            f"🔹 **GitHub:** {github}\n\n"
-            f"⚙️ **Build Into:**\n"
+            f"🔹 **Plan:** {plan}\n\n"
+            f"⚙️ **Build Info:**\n"
             f"🔹 **Status:** {status_icon}\n"
-            f"🔹 **Connected Repo:** {connected_repo}\n\n"
+            f"🔹 **RAM:** {ram}\n"
+            f"🔹 **ROM:** {rom}\n"
+            f"🔹 **Repo:** {github}\n\n"
             f"📜 **Logs:**\n"
             f"```\n{logs}\n```",
             reply_markup=reply_markup
@@ -91,52 +102,59 @@ async def fetch_project_logs(_, callback_query):
         logging.error(f"Error in fetch_project_logs callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
+@app.on_callback_query(filters.regex("^repo_"))
+async def connect_repo(_, callback_query):
+    try:
+        user_id = callback_query.from_user.id
+        data = callback_query.data.split("_")
+        project_id = int(data[1])
+        repo_id = int(data[2])
+
+        success = await api.set_repo(user_id, project_id, repo_id)
+        if success:
+            await callback_query.message.edit_text("✅ Repository connected successfully!")
+            await fetch_project_logs(_, callback_query)
+        else:
+            await callback_query.answer("❌ Failed to connect the repository. Try again.", show_alert=True)
+    except Exception as e:
+        logging.error(f"Error in connect_repo callback: {e}")
+        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+
 @app.on_callback_query(filters.regex("^stop_"))
 async def stop_project(_, callback_query):
     try:
-        project_id = callback_query.data.split("_")[1]
+        project_id = int(callback_query.data.split("_")[1])
         await callback_query.message.edit_text("⛔ **Stopping project...**")
-        await asyncio.sleep(2)
-        await callback_query.message.edit_text(
-            f"🔴 **Project {project_id} is now stopped.**"
-        )
+        await asyncio.sleep(3)
+        await callback_query.message.edit_text("🔴 **Project successfully stopped!**\n\nClick below to start again.", reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔄 Start Again", callback_data=f"start_{project_id}")]
+        ]))
     except Exception as e:
         logging.error(f"Error in stop_project callback: {e}")
+        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
+
+@app.on_callback_query(filters.regex("^start_"))
+async def start_project(_, callback_query):
+    try:
+        project_id = int(callback_query.data.split("_")[1])
+        await callback_query.message.edit_text("🔄 **Starting project...**")
+        await asyncio.sleep(3)
+        await callback_query.message.edit_text("🟢 **Project successfully started!**")
+    except Exception as e:
+        logging.error(f"Error in start_project callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
 @app.on_callback_query(filters.regex("^redeploy_"))
 async def redeploy_project(_, callback_query):
     try:
-        project_id = callback_query.data.split("_")[1]
+        project_id = int(callback_query.data.split("_")[1])
         await callback_query.message.edit_text("♻️ **Redeploying project...**")
         await asyncio.sleep(3)
         await callback_query.message.edit_text(
-            f"🟢 **Project {project_id} redeployed successfully!**\n\n"
-            "✨ Deployment details updated."
+            "🟢 **Project redeployed successfully!**\n\nDeployment details updated."
         )
     except Exception as e:
         logging.error(f"Error in redeploy_project callback: {e}")
-        await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
-
-@app.on_callback_query(filters.regex("^change_repo_"))
-async def change_repo(_, callback_query):
-    try:
-        user_id = callback_query.from_user.id
-        repos = await api.get_repos(user_id)
-
-        if not repos:
-            return await callback_query.answer("⚠️ No connected repositories found.", show_alert=True)
-
-        buttons = [
-            [InlineKeyboardButton(repo.get("name"), callback_data=f"repo_{repo.get('id')}")]
-            for repo in repos
-        ]
-        await callback_query.message.edit_text(
-            "🔄 **Select a repository to connect:**",
-            reply_markup=InlineKeyboardMarkup(buttons)
-        )
-    except Exception as e:
-        logging.error(f"Error in change_repo callback: {e}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
 @app.on_callback_query(filters.regex("^refresh_"))
