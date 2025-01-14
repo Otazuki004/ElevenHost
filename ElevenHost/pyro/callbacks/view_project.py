@@ -63,7 +63,7 @@ async def view_project(_, callback_query):
     if len(logs) > 200:
       async with aiofiles.open(f'log{user_id}.txt', mode='w') as fk:
         await fk.write(logs)
-      await message.reply_document(f'log{user_id}.txt')
+      await callback_query.message.reply_document(f'log{user_id}.txt')
       await run(f'rm -rf log{user_id}.txt')
   except Exception as e:
     logging.error(f"Error in view_project callback: {traceback.format_exc()}")
