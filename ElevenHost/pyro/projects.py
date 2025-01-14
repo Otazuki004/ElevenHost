@@ -162,7 +162,7 @@ async def fetch_project_logs(_, callback_query):
             reply_markup=reply_markup
         )
     except Exception as e:
-        logging.error(f"Error in fetch_project_logs callback: {e}")
+        logging.error(f"Error in fetch_project_logs callback: {traceback.format_exc()}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
 
 @app.on_callback_query(filters.regex("^repo_"))
