@@ -8,7 +8,7 @@ from pyrogram.types import *
 async def git(_, message):
   if not message.chat.type == ChatType.PRIVATE: return await message.reply("This command only works in private")
   elif not await api.exists(message.from_user.id): return await message.reply("❌ You are not registered yet. Please use /start to register your account.")
-
+  love = await message.reply("Loading...")
   user = await api.user_info(message.from_user.id)
 
   async with httpx.AsyncClient() as mano:
@@ -25,4 +25,5 @@ Bio: {bio}
 Followers: {followers}
 Following: {following}"""
   btn = InlineKeyboardMarkup([[InlineKeyboardButton("Disconnect", callback_data=f"dis_github_{message.from_user.id}")]])
+  await love.delete()
   await message.reply(txt, reply_markup=btn)
