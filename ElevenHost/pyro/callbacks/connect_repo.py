@@ -13,7 +13,7 @@ async def connect_repo(_, callback_query):
     data = callback_query.data.split("_")
     project_id = int(data[1])
     repo_id = int(data[2])
-    if user_id != int(data[3]):
+    if user_id != int(data.replace(f'repo_{project_id}_{repo_id}_', ''):
       return await callback_query.answer("This is not for you!")
       
     success = await api.set_repo(user_id, project_id, repo_id)
