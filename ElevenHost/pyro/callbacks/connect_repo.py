@@ -22,6 +22,6 @@ async def connect_repo(_, callback_query):
     else:
         await callback_query.answer("❌ Failed to connect the repository. Try again.", show_alert=True)
   except Exception as e:
-    logging.error(f"Error in connect_repo callback: {e}")
+    logging.error(f"Error in connect_repo callback: {traceback.format_exc()}")
     await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
       
