@@ -14,5 +14,5 @@ async def sh(_, message):
       await uwu.write(results)
     await message.reply_document('shell.txt')
   else:
-    await message.reply(f"```python\n{results}```")
+    await message.reply(f"<pre>{results}</pre>")
   await a.delete()
