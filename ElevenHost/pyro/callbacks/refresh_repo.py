@@ -1,7 +1,6 @@
-from ElevenHost import app
+from ElevenHost import *
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from .. import api
 import logging
 
 
