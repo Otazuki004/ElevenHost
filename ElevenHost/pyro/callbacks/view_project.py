@@ -11,13 +11,15 @@ async def view_project(_, callback_query):
     try:
         user_id = callback_query.from_user.id
         data = callback_query.data.split("_")
+        
+        if len(data) < 3:
+            return await callback_query.answer("❌ Invalid callback data format!", show_alert=True)
+        
         project_id = int(data[1])
-
         if str(user_id) != data[2]:
             return await callback_query.answer("❌ This action is not authorized for you!", show_alert=True)
 
         project_details = await api.project_info(user_id, project_id)
-
         if not project_details:
             return await callback_query.answer("⚠️ Unable to fetch project details. Try again later.", show_alert=True)
 
@@ -76,6 +78,7 @@ async def view_project(_, callback_query):
                 await file.write(logs)
             await callback_query.message.reply_document(f'log_{user_id}.txt', caption="📜 **Full Logs**")
             await run(f'rm -rf log_{user_id}.txt')
+
     except Exception as e:
         logging.error(f"Error in view_project callback: {traceback.format_exc()}")
         await callback_query.answer("🚨 An error occurred. Please try again later.", show_alert=True)
