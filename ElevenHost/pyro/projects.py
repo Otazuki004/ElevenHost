@@ -6,7 +6,6 @@ from ..others import ask, qfilter
 import logging
 import asyncio
 
-
 @app.on_message(filters.command(["project", "projects"]))
 async def projects(_, message: Message):
     try:
@@ -22,7 +21,7 @@ async def projects(_, message: Message):
         user_projects = await api.get_projects(user_id)
         if user_projects:
             buttons = [
-                [InlineKeyboardButton(project["name"], callback_data=f"deploy_{project['project_id']}")]
+                [InlineKeyboardButton(project["name"], callback_data=f"deploy_{project['project_id']}_{user_id}")]
                 for project in user_projects if project.get("name") and project.get("project_id")
             ]
             buttons.append([InlineKeyboardButton("➕ Create New Project", callback_data="select_plans")])
@@ -52,5 +51,4 @@ async def projects(_, message: Message):
         await message.reply_text(
             "🚨 An unexpected error occurred. Please try again later or contact support.",
             quote=True
-        )
-
+            )
