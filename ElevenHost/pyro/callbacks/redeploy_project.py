@@ -9,8 +9,13 @@ import logging
 async def redeploy_project(_, callback_query):
     try:
         user_id = callback_query.from_user.id
-        project_id = int(callback_query.data.split("_")[1])
-        
+        data = callback_query.data.split("_")
+        project_id = int(data[1])
+        callback_user_id = data[2]
+
+        if str(user_id) != callback_user_id:
+            return await callback_query.answer("❌ This action is not authorized for you!", show_alert=True)
+
         project_details = await api.project_info(user_id, project_id)
         if not project_details:
             return await callback_query.answer("❌ Unable to fetch project details or unauthorized action.", show_alert=True)
@@ -20,20 +25,19 @@ async def redeploy_project(_, callback_query):
         )
 
         success = await api.host(user_id, project_id)
-        
         if success:
             logs = await api.get_logs(user_id, project_id)
-            log_text = logs if logs else "No logs available for this project."
-            
+            log_text = logs[-400:] if logs else "No logs available for this project."
+
             await callback_query.message.edit_text(
                 f"✅ **Project Redeployed Successfully!**\n\n"
                 f"🔹 **Name:** {project_details.get('name', 'Unknown')}\n"
                 f"🔹 **ID:** {project_id}\n"
                 f"🔹 **Status:** 🟢 Alive\n\n"
-                f"📜 **Logs:**\n{log_text}",
+                f"📜 **Logs:**\n<pre>{log_text}</pre>",
                 reply_markup=InlineKeyboardMarkup([
-                    [InlineKeyboardButton("🔃 Refresh", callback_data=f"refresh_{project_id}")],
-                    [InlineKeyboardButton("⛔ Stop", callback_data=f"stop_{project_id}")]
+                    [InlineKeyboardButton("🔃 Refresh", callback_data=f"refresh_{project_id}_{user_id}")],
+                    [InlineKeyboardButton("⛔ Stop", callback_data=f"stop_{project_id}_{user_id}")]
                 ])
             )
         else:
@@ -45,4 +49,4 @@ async def redeploy_project(_, callback_query):
         await callback_query.answer(
             "🚨 An unexpected error occurred. Please try again later.",
             show_alert=True
-  )
+        )
